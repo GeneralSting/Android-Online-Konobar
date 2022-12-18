@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Online Waiter</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Sign Up</string>
+    <string name="dialog_alert_phone_number">I Understand</string>
+    <string name="dialog_alert_phone_number_body">You need to allow Phone Number permission. If you disable this permission, You will not able to procced!</string>
+    <string name="tv_enter_phone_number">Enter phone number</string>
+    <string name="phone_number_example">+1 650–555–1234</string>
+    <string name="one_time_password">Enter received OTP</string>
+    <string name="send_message_on_phone_number">Send phone number</string>
+    <string name="Verify_otp">Verify OTP</string>
+    <string name="phone_number_validation_failed">Enter valid phone Number</string>
+    <string name="phone_number_not_sent">Error! Please enter phone number.</string>
+    <string name="login_verification_failed">Verification Failed! Check entered number.</string>
+    <string name="login_code_sent">Code Sent!</string>
+    <string name="login_wrong_otp">Wrong OTP code!</string>
+    <string name="title_activity_home2">Home2</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="nav_menu">Order</string>
+    <string name="nav_cart">Cart</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_logout">Logout</string>
+    <string name="back_button_pressed">One more time to exit</string>
+
+
+</resources>

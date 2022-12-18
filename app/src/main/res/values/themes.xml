@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.OnlineKonobar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/pewter_blue</item>
+        <item name="colorPrimaryVariant">@color/pewter_blue</item>
+        <item name="colorOnPrimary">@color/light_cyan</item>    <!--text-->
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/pewter_blue</item>
+        <item name="colorSecondaryVariant">@color/pewter_blue</item>
+        <item name="colorOnSecondary">@color/pewter_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.OnlineKonobar.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.OnlineKonobar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.OnlineKonobar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>
