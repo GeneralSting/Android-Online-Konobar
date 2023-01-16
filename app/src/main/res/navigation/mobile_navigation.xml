@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_menu"
-        android:name="com.example.onlinekonobar.ui.gallery.GalleryFragment"
+        android:name="com.example.onlinekonobar.ui.menu.MenuFragment"
         android:label="@string/nav_menu"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_menu" />
 
     <fragment
         android:id="@+id/nav_cart"
-        android:name="com.example.onlinekonobar.ui.home.HomeFragment"
+        android:name="com.example.onlinekonobar.ui.cart.CartFragment"
         android:label="@string/nav_cart"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_cart" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.example.onlinekonobar.ui.slideshow.SlideshowFragment"
+        android:name="com.example.onlinekonobar.ui.settings.SettingsFragment"
         android:label="@string/nav_settings"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_settings" />
 </navigation>

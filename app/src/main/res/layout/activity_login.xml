@@ -63,8 +63,8 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:indeterminateTint="@color/light_cyan"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:visibility="invisible" />
 
         <EditText

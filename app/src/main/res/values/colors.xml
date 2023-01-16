@@ -13,11 +13,14 @@
     <color name="pewter_blue">#92ABB1</color>
     <color name="tumbleweed">#CFAF96</color>
     <color name="tuscany">#B19892</color>
+    <color name="drink_card_view">#EDCFAF96</color>
     <color name="cafe_noir">#503524</color>
     <color name="black">#000</color>
     <color name="white">#fff</color>
     <color name="dark_gray">#a9a9a9</color>
     <color name="overlay_background">#7f333639</color>
     <color name="overlay_action_bar">#0e0d0e</color>
+    <color name="drink_add_button">#44EA63</color>
+    <color name="drink_remove_button">#ea4444</color>
 
 </resources>

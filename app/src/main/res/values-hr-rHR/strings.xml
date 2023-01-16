@@ -19,7 +19,12 @@
     <string name="nav_cart">Košarica</string>
     <string name="nav_settings">Postavke</string>
     <string name="nav_logout">Odjava</string>
-    <string name="back_button_pressed">Još jednom za izlaz</string>
+    <string name="back_button_pressed">Još jednom za odjavu</string>
+    <string name="title_activity_home">Naslovnica</string>
+    <string name="navigation_drawer_open">Otvori navigacijsku traku</string>
+    <string name="navigation_drawer_close">Zatvori navigacijsku traku</string>
+    <string name="nav_header_desc">Navigacijsko zaglavlje</string>
+    <string name="action_settings">Postavke</string>
 
 
 

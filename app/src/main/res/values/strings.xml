@@ -14,7 +14,7 @@
     <string name="login_verification_failed">Verification Failed! Check entered number.</string>
     <string name="login_code_sent">Code Sent!</string>
     <string name="login_wrong_otp">Wrong OTP code!</string>
-    <string name="title_activity_home2">Home2</string>
+    <string name="title_activity_home">Home2</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -24,7 +24,7 @@
     <string name="nav_cart">Cart</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_logout">Logout</string>
-    <string name="back_button_pressed">One more time to exit</string>
+    <string name="back_button_pressed">One more time to logout</string>
 
 
 </resources>

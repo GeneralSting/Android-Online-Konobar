@@ -1,6 +1,7 @@
 package com.example.onlinekonobar.Models;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Cafe {
     String cafeLocation;
@@ -10,12 +11,14 @@ public class Cafe {
     String cafeOwnerName;
     String cafeOwnerOib;
     String cafeOwnerPhoneNumber;
+    Map<String, Drink> cafeDrinks;
+    Map<String, CafeCategory> cafeDrinksCategories;
 
     public Cafe() {
         // Default constructor required for calls to DataSnapshot.getValue(Cafe.class)
     }
 
-    public Cafe(String cafeLocation, String cafeName, String cafeOwnerGmail, String getCafeOwnerLastname, String cafeOwnerName, String cafeOwnerOib, String cafeOwnerPhoneNumber, ArrayList<Employee> cafeEmployees) {
+    public Cafe(String cafeLocation, String cafeName, String cafeOwnerGmail, String getCafeOwnerLastname, String cafeOwnerName, String cafeOwnerOib, String cafeOwnerPhoneNumber, Map<String, Drink> cafeDrinks) {
         this.cafeLocation = cafeLocation;
         this.cafeName = cafeName;
         this.cafeOwnerGmail = cafeOwnerGmail;
@@ -23,6 +26,7 @@ public class Cafe {
         this.cafeOwnerName = cafeOwnerName;
         this.cafeOwnerOib = cafeOwnerOib;
         this.cafeOwnerPhoneNumber = cafeOwnerPhoneNumber;
+        this.cafeDrinks = cafeDrinks;
     }
 
     public String getCafeLocation() {
@@ -79,5 +83,13 @@ public class Cafe {
 
     public void setCafeOwnerPhoneNumber(String cafeOwnerPhoneNumber) {
         this.cafeOwnerPhoneNumber = cafeOwnerPhoneNumber;
+    }
+
+    public Map<String, Drink> getCafeDrinks() {
+        return cafeDrinks;
+    }
+
+    public void setCafeDrinks(Map<String, Drink> cafeDrinks) {
+        this.cafeDrinks = cafeDrinks;
     }
 }

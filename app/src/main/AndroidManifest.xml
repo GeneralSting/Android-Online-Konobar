@@ -16,17 +16,10 @@
         android:theme="@style/Theme.OnlineKonobar"
         tools:targetApi="31">
         <activity
-            android:name=".Home2"
-            android:exported="false"
-            android:label="@string/title_activity_home2"
-            android:theme="@style/Theme.OnlineKonobar.NoActionBar">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".HomeActivity"
-            android:exported="false">
+            android:exported="false"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.OnlineKonobar.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
