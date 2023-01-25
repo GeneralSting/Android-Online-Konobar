@@ -2,9 +2,18 @@
 <resources>
     <string name="app_name">Online Konobar</string>
     <string name="btn_login">Prijava</string>
-    <string name="btn_register">Registracija</string>
+    <string name="btn_application">Aplikacija</string>
     <string name="dialog_alert_phone_number">Razumijem</string>
     <string name="dialog_alert_phone_number_body">Odbijanjem pristupa broja vašeg mobitela, nećete moći nastaviti s daljnim korištenjem ove aplikacije!</string>
+    <string name="dialog_show_app_purpose">Ova aplikacija je napravljena za konobare i vlasnike kafića koji su registrirani u našem sustavu.
+        Aplikacija omogućuje konobarima brzo izvršavanje narudžbi i kontroliranje pićima u mjestu njihovog poslovanja.
+        Vlasnicima omogućavamo pregled poslovanja objekta</string>
+    <string name="dialog_show_open_privacy_policy">Politika privatnosti</string>
+    <string name="dialog_show_close">Izađi</string>
+    <string name="dialog_show_privacy_policy">Aplikacija od konobara zahtjeva pristup broju uređaja kojim će koristit ovu aplikaciju.
+        Te pristup medijskom sadržaju pri dodavanju slike za novo piće. Ostale prisutupe vašem uređaju aplikacije ne zahtjeva!
+        Dužnost konobara je da aplikaciju koristi u skladu pravila njegovog poslodavca. Naša dužnost je sigurnost vaših podataka.</string>
+    <string name="open_web_privacy_policy">Više o privatnosti</string>
     <string name="tv_enter_phone_number">Unesite broj Vašeg mobitela</string>
     <string name="phone_number_example">+385 12 345 6789</string>
     <string name="one_time_password">Unesite PIN primljen u poruci</string>
@@ -14,6 +23,7 @@
     <string name="phone_number_not_sent">Greška! Molimo samostalno unesite broj.</string>
     <string name="login_verification_failed">Neuspjela Provjera! Provjerite točnost broja.</string>
     <string name="login_code_sent">PIN je poslan!</string>
+    <string name="login_empty_otp">Unesite PIN!</string>
     <string name="login_wrong_otp">Netočan PIN!</string>
     <string name="nav_menu">Narudžba</string>
     <string name="nav_cart">Košarica</string>
@@ -25,6 +35,16 @@
     <string name="navigation_drawer_close">Zatvori navigacijsku traku</string>
     <string name="nav_header_desc">Navigacijsko zaglavlje</string>
     <string name="action_settings">Postavke</string>
+    <string name="cart_drink_amount">Količina: </string>
+    <string name="cart_drink_price">Cijena: </string>
+    <string name="cart_drink_total_price">Ukupan iznos: </string>
+    <string name="cart_bill_confirm">Potvrdi</string>
+    <string name="cart_bill_amount_empty">Nema Proizvoda</string>
+    <string name="cart_bill_price_empty">0.00€</string>
+    <string name="cart_bill_amount_text">Proizvoda</string>
+    <string name="cafe_bill_completed">Uspješno spremljen račun:</string>
+
+
 
 
 

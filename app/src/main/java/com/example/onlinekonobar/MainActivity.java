@@ -11,10 +11,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     Button btnLogin;
+    Button btnRegistration;
 
     int REQUEST_CODE_ASK_PERMISSION_READ_PHONE_NUMBER = 102;
     private String phoneNumber = "";
@@ -37,7 +40,50 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+        btnRegistration = findViewById(R.id.btnApplication);
+        btnRegistration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which){
+                                            case DialogInterface.BUTTON_POSITIVE:
+                                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/GeneralSting"));
+                                                startActivity(browserIntent);
+                                                break;
 
+                                            case DialogInterface.BUTTON_NEGATIVE:
+                                                dialog.dismiss();
+                                                break;
+                                        }
+                                    }
+                                };
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setMessage(getResources().getString(R.string.dialog_show_privacy_policy)).setPositiveButton(
+                                        getResources().getString(R.string.open_web_privacy_policy), dialogClickListener)
+                                        .setNegativeButton(getResources().getString(R.string.dialog_show_close), dialogClickListener).show();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage(getResources().getString(R.string.dialog_show_app_purpose)).setPositiveButton(
+                        getResources().getString(R.string.dialog_show_open_privacy_policy), dialogClickListener)
+                        .setNegativeButton(getResources().getString(R.string.dialog_show_close), dialogClickListener).show();
+            }
+        });
         btnLogin = findViewById(R.id.btnLogin);
         //kako bi nastavili u login activity-u trebamo prihvatit dopustenje
         btnLogin.setOnClickListener(new View.OnClickListener() {

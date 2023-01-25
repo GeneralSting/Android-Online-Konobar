@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.onlinekonobar.Interfaces.ItemClickListener;
 import com.example.onlinekonobar.R;
 
-public class DrinkViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class DrinkViewHolder extends RecyclerView.ViewHolder {
     public TextView txtDrinkName;
     public TextView txtDrinkDescription;
     public TextView txtDrinkPrice;
@@ -33,16 +33,10 @@ public class DrinkViewHolder extends RecyclerView.ViewHolder implements View.OnC
         txtDrinkAddedNumber = (TextView) itemView.findViewById(R.id.drink_added_number);
         btnDrinkAdd = (Button) itemView.findViewById(R.id.drink_add);
         btnDrinkRemove = (Button) itemView.findViewById(R.id.drink_remove);
-
-        itemView.setOnClickListener(this);
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
-    public void onClick(View view) {
-        //null
-        itemClickListener.onClick (view,getAdapterPosition(), false);
-    }
 }

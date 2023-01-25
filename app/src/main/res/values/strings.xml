@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">Online Waiter</string>
     <string name="btn_login">Login</string>
-    <string name="btn_register">Sign Up</string>
+    <string name="btn_application">Aplikacija</string>
     <string name="dialog_alert_phone_number">I Understand</string>
     <string name="dialog_alert_phone_number_body">You need to allow Phone Number permission. If you disable this permission, You will not able to procced!</string>
+    <string name="dialog_show_app_purpose">This application is made for waiters and cafe owners who are registered in our system.
+        The application allows waiters to quickly execute orders and control drinks in their place of business.
+        We provide the owners with an overview of the facility\'s operations</string>
+    <string name="dialog_show_open_privacy_policy">Privacy Policy</string>
+    <string name="dialog_show_close">Exit</string>
+    <string name="dialog_show_privacy_policy">The application requires the waiter to access the number of the device with which he will use this application.
+        And access to media content when adding an image for a new drink. The application does not require other access to your device!
+        It is the duty of the waiter to use the application in accordance with the rules of his employer. Our duty is the security of your data.</string>
+    <string name="open_web_privacy_policy">More about privacy</string>
     <string name="tv_enter_phone_number">Enter phone number</string>
     <string name="phone_number_example">+1 650–555–1234</string>
     <string name="one_time_password">Enter received OTP</string>
@@ -13,6 +22,7 @@
     <string name="phone_number_not_sent">Error! Please enter phone number.</string>
     <string name="login_verification_failed">Verification Failed! Check entered number.</string>
     <string name="login_code_sent">Code Sent!</string>
+    <string name="login_empty_otp">Enter OTP code!</string>
     <string name="login_wrong_otp">Wrong OTP code!</string>
     <string name="title_activity_home">Home2</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -25,6 +35,14 @@
     <string name="nav_settings">Settings</string>
     <string name="nav_logout">Logout</string>
     <string name="back_button_pressed">One more time to logout</string>
+    <string name="cart_drink_amount">Amount: </string>
+    <string name="cart_drink_price">Price: </string>
+    <string name="cart_drink_total_price">Total price: </string>
+    <string name="cart_bill_confirm">Confirm</string>
+    <string name="cart_bill_amount_empty">No products</string>
+    <string name="cart_bill_price_empty">0.00€</string>
+    <string name="cart_bill_amount_text">Products</string>
+    <string name="cafe_bill_completed">Successfully saved bill:</string>
 
 
 </resources>

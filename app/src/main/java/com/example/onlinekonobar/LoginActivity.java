@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     String verificationID;
     ProgressBar loginProgressBar;
     String phoneNumber = "";
+    Boolean showProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         btnVerifyOtp =findViewById(R.id.btnVerifyOtp);
         mAuth = FirebaseAuth.getInstance();
         loginProgressBar = findViewById(R.id.loginProgessBar);
+        showProgressBar = true;
         btnSendPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -61,7 +63,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
                     String number = etPhoneNumber.getText().toString();
-                    loginProgressBar.setVisibility(View.VISIBLE);
+                    if(showProgressBar) {
+                        loginProgressBar.setVisibility(View.VISIBLE);
+                        showProgressBar = false;
+                    }
                     sendverificationcode(number);
                 }
             }
@@ -72,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             {
                 if(TextUtils.isEmpty(etRecivedOtp.getText().toString()))
                 {
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_wrong_otp), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_empty_otp), Toast.LENGTH_SHORT).show();
                 }
                 else
                     verifycode(etRecivedOtp.getText().toString());
@@ -93,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
+            //ovo su promjenili, nikada se ne poziva mCallbacks
             mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential credential)
@@ -128,6 +134,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signinbyCredentials(PhoneAuthCredential credential)
     {
+        showProgressBar = true;
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
@@ -138,6 +145,8 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("phoneNumber", etPhoneNumber.getText().toString());
                         finishAffinity();
                         startActivity(intent);
+                    } else {
+                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_wrong_otp), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -1,26 +1,28 @@
 package com.example.onlinekonobar.Models;
 
 public class Drink {
-    String cafeDrinkCategory;
+    String cafeDrinkId;
     String cafeDrinkName;
     String cafeDrinkDescription;
     Float cafeDrinkPrice;
+    String cafeDrinkImage;
 
     public Drink(){}
 
-    public Drink(String cafeDrinkCategory, String cafeDrinkName, String cafeDrinkDescription, Float cafeDrinkPrice) {
-        this.cafeDrinkCategory = cafeDrinkCategory;
+    public Drink(String cafeDrinkId, String cafeDrinkName, String cafeDrinkDescription, Float cafeDrinkPrice, String cafeDrinkImage) {
+        this.cafeDrinkId = cafeDrinkId;
         this.cafeDrinkName = cafeDrinkName;
         this.cafeDrinkDescription = cafeDrinkDescription;
         this.cafeDrinkPrice = cafeDrinkPrice;
+        this.cafeDrinkImage = cafeDrinkImage;
     }
 
-    public String getCafeDrinkCategory() {
-        return cafeDrinkCategory;
+    public String getCafeDrinkImage() {
+        return cafeDrinkImage;
     }
 
-    public void setCafeDrinkCategory(String cafeDrinkCategory) {
-        this.cafeDrinkCategory = cafeDrinkCategory;
+    public void setCafeDrinkImage(String cafeDrinkImage) {
+        this.cafeDrinkImage = cafeDrinkImage;
     }
 
     public String getCafeDrinkName() {
@@ -47,4 +49,11 @@ public class Drink {
         this.cafeDrinkPrice = cafeDrinkPrice;
     }
 
+    public String getCafeDrinkId() {
+        return cafeDrinkId;
+    }
+
+    public void setCafeDrinkId(String cafeDrinkId) {
+        this.cafeDrinkId = cafeDrinkId;
+    }
 }

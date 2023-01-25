@@ -19,6 +19,7 @@
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.OnlineKonobar.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -26,6 +27,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="sensorPortrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -33,6 +35,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="sensorPortrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

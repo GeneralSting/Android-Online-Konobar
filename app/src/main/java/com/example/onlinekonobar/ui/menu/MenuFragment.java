@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.onlinekonobar.HomeActivity;
 import com.example.onlinekonobar.Interfaces.ItemClickListener;
 import com.example.onlinekonobar.Models.Cafe;
 import com.example.onlinekonobar.Models.CafeCategory;
 import com.example.onlinekonobar.Models.Category;
 import com.example.onlinekonobar.Models.Drink;
+import com.example.onlinekonobar.Models.DrinkBill;
 import com.example.onlinekonobar.R;
 import com.example.onlinekonobar.ViewHolder.DrinkViewHolder;
 import com.example.onlinekonobar.ViewHolder.MenuViewHolder;
 import com.example.onlinekonobar.databinding.FragmentMenuBinding;
+import com.example.onlinekonobar.ui.cart.CartViewModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,12 +46,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class MenuFragment extends Fragment {
 
@@ -64,7 +74,8 @@ public class MenuFragment extends Fragment {
     ProgressDialog progressDialog;
     HashSet<String> uniqueCategories = new HashSet<>();
     List<String> allCategories = new ArrayList<>();
-
+    CartViewModel cartViewModel;
+    Boolean emptyCart;
 
     Uri imageUri;
     StorageReference storageReference;
@@ -207,16 +218,18 @@ public class MenuFragment extends Fragment {
                             String profileImage = snapshot.child("image").getValue().toString();
                             String name = snapshot.child("name").getValue().toString();
 
-
-                            int id = getResources().getIdentifier(profileImage, "drawable", getActivity().getPackageName());
-                            Drawable drawable;
-                            if (id == 0) {
-                                id = getResources().getIdentifier("no_image", "drawable", getActivity().getPackageName());
-                                drawable = getResources().getDrawable(id);
+                            if(isAdded()) {
+                                int id = getResources().getIdentifier(profileImage, "drawable", getActivity().getPackageName());
+                                Drawable drawable;
+                                if (id == 0) {
+                                    id = getResources().getIdentifier("no_image", "drawable", getActivity().getPackageName());
+                                    drawable = getResources().getDrawable(id);
+                                }
+                                else
+                                    drawable = getResources().getDrawable(id);
+                                Glide.with(getActivity()).load(drawable).centerCrop().into(holder.imageView);
                             }
-                            else
-                                drawable = getResources().getDrawable(id);
-                            Glide.with(getActivity()).load(drawable).centerCrop().into(holder.imageView);
+
 
 
                             holder.txtMenuName.setText(name);
@@ -275,7 +288,28 @@ public class MenuFragment extends Fragment {
         };
         menuViewModel.getDisplayingCategories().observe(requireActivity(), removeDrinksCategories);
 
-        drinksCategoryRef = FirebaseDatabase.getInstance().getReference("cafes").child(cafeId).child("cafeDrinksCategories").child(categoryId).child("cafeDrinks");
+        //cart for drinks
+        final HashMap<String, DrinkBill>[] cartDrinks = new HashMap[]{new HashMap<>()};
+        emptyCart = false;
+        //observing drinks in cart:
+        cartViewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
+        HashMap<String, DrinkBill> addedCartDrinks = cartViewModel.getDrinksInCart().getValue();
+        if (addedCartDrinks == null || addedCartDrinks.isEmpty()) {
+            emptyCart = true;
+        }
+        final Observer<HashMap<String, DrinkBill>> observingCartDrinks = new Observer<HashMap<String, DrinkBill>>() {
+            @Override
+            public void onChanged(HashMap<String, DrinkBill> stringDrinkBillHashMap) {
+            }
+        };
+        cartViewModel.getDrinksInCart().observe(requireActivity(), observingCartDrinks);
+        //sending cafeId to cartFragment
+        cartViewModel.setCafeId(cafeId);
+        //for drink prices, 2 decimals
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
+        drinksCategoryRef = FirebaseDatabase.getInstance().getReference("cafes").child(cafeId).child("cafeDrinksCategories")
+                .child(categoryId).child("cafeDrinks");
         FirebaseRecyclerOptions<Drink> options = new FirebaseRecyclerOptions.Builder<Drink>()
                 .setQuery(drinksCategoryRef, Drink.class)
                 .build();
@@ -286,32 +320,68 @@ public class MenuFragment extends Fragment {
                 drinksCategoryRef.child(drinkId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String description = snapshot.child("cafeDrinkDescription").getValue().toString();
-                        String name = snapshot.child("cafeDrinkName").getValue().toString();
-                        String price = snapshot.child("cafeDrinkPrice").getValue().toString();
-                        String drinkImage = snapshot.child("cafeDrinkImage").getValue().toString();
-
-                        if(drinkImage.equals("")) {
-                            int id = getResources().getIdentifier("no_image", "drawable", getActivity().getPackageName());
-                            Drawable drawable = getResources().getDrawable(id);
-                            Glide.with(getActivity()).load(drawable).centerCrop().into(holder.drinkImageView);
+                        Drink cafeCategoryDrink = new Drink(
+                                snapshot.getKey().toString(),
+                                snapshot.child("cafeDrinkName").getValue().toString(),
+                                snapshot.child("cafeDrinkDescription").getValue().toString(),
+                                Float.valueOf(snapshot.child("cafeDrinkPrice").getValue().toString()),
+                                snapshot.child("cafeDrinkImage").getValue().toString()
+                        );
+                        if(isAdded()) {
+                            if(cafeCategoryDrink.getCafeDrinkImage().equals("")) {
+                                int id = getResources().getIdentifier("no_image", "drawable", getActivity().getPackageName());
+                                Drawable drawable = getResources().getDrawable(id);
+                                Glide.with(getActivity()).load(drawable).centerCrop().into(holder.drinkImageView);
+                            }
+                            else {
+                                Glide.with(getActivity()).load(cafeCategoryDrink.getCafeDrinkImage()).into(holder.drinkImageView);
+                            }
                         }
                         else {
-                            Glide.with(getActivity()).load(drinkImage).into(holder.drinkImageView);
+                            Log.d("PROBA", "onDataChange: ");
                         }
 
-                        holder.txtDrinkName.setText(name);
-                        holder.txtDrinkDescription.setText(description);
-                        holder.txtDrinkPrice.setText(price.toString() + "€");
-
+                        holder.txtDrinkName.setText(cafeCategoryDrink.getCafeDrinkName());
+                        holder.txtDrinkDescription.setText(cafeCategoryDrink.getCafeDrinkDescription());
+                        holder.txtDrinkPrice.setText(decimalFormat.format(cafeCategoryDrink.getCafeDrinkPrice()) + "€");
 
                         final int[] drinkCounter = {0};
+                        if (addedCartDrinks != null && !addedCartDrinks.isEmpty()) {
+                            for (String key : addedCartDrinks.keySet()) {
+                                DrinkBill value = addedCartDrinks.get(key);
+                                if(value.getDrinkId() == cafeCategoryDrink.getCafeDrinkId()) {
+                                    drinkCounter[0] = value.getDrinkAmount();
+                                }
+                            }
+                            cartDrinks[0] = addedCartDrinks;
+                            for(String key : cartDrinks[0].keySet()) {
+                                DrinkBill value = cartDrinks[0].get(key);
+                            }
+                        }
                         holder.txtDrinkAddedNumber.setText(String.valueOf(drinkCounter[0]));
-
                         holder.btnDrinkAdd.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 drinkCounter[0]++;
+                                if(drinkCounter[0] > 1) {
+                                    DrinkBill addingDrinkBill = cartDrinks[0].get(cafeCategoryDrink.getCafeDrinkId());
+                                    addingDrinkBill.setDrinkAmount(drinkCounter[0]);
+                                    addingDrinkBill.setDrinkTotalPrice(round((float) (addingDrinkBill.getDrinkPrice() * drinkCounter[0]), 2));
+                                    addingDrinkBill.setDrinkTotalPrice(addingDrinkBill.getDrinkPrice() * drinkCounter[0]);
+                                    cartDrinks[0].put(cafeCategoryDrink.getCafeDrinkId(), addingDrinkBill);
+                                    cartViewModel.setDrinksInCart(cartDrinks[0]);
+                                }
+                                else {
+                                    DrinkBill addingDrinkBill = new DrinkBill(
+                                            cafeCategoryDrink.getCafeDrinkId(),
+                                            cafeCategoryDrink.getCafeDrinkName(),
+                                            Float.valueOf(cafeCategoryDrink.getCafeDrinkPrice().toString()),
+                                            Float.valueOf(cafeCategoryDrink.getCafeDrinkPrice().toString()),
+                                            drinkCounter[0]
+                                    );
+                                    cartDrinks[0].put(addingDrinkBill.getDrinkId(), addingDrinkBill);
+                                    cartViewModel.setDrinksInCart(cartDrinks[0]);
+                                }
                                 holder.txtDrinkAddedNumber.setText(String.valueOf(drinkCounter[0]));
                             }
                         });
@@ -321,8 +391,18 @@ public class MenuFragment extends Fragment {
                             public void onClick(View view) {
                                 if(drinkCounter[0] > 0) {
                                     drinkCounter[0]--;
+                                    if(drinkCounter[0] != 0) {
+                                        DrinkBill addingDrinkBill = cartDrinks[0].get(cafeCategoryDrink.getCafeDrinkId());
+                                        addingDrinkBill.setDrinkAmount(drinkCounter[0]);
+                                        addingDrinkBill.setDrinkTotalPrice(round((float) (addingDrinkBill.getDrinkPrice() * drinkCounter[0]), 2));
+                                        cartDrinks[0].put(cafeCategoryDrink.getCafeDrinkId(), addingDrinkBill);
+                                        cartViewModel.setDrinksInCart(cartDrinks[0]);
+                                    }
+                                    else {
+                                        cartDrinks[0].remove(cafeCategoryDrink.getCafeDrinkId());
+                                        cartViewModel.setDrinksInCart(cartDrinks[0]);
+                                    }
                                     holder.txtDrinkAddedNumber.setText(String.valueOf(drinkCounter[0]));
-
                                 }
                             }
                         });
@@ -359,6 +439,13 @@ public class MenuFragment extends Fragment {
         };
         recyclerMenuDrinks.setAdapter(adapterDrinks);
         adapterDrinks.startListening();
+    }
+
+    //for setting 2 decimals for Float numbers
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
     }
 
     private void uploadImage() {
@@ -402,5 +489,6 @@ public class MenuFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        Toast.makeText(getActivity(), "bum", Toast.LENGTH_SHORT).show();
     }
 }

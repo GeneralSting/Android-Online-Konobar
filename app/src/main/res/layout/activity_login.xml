@@ -52,7 +52,7 @@
             android:id="@+id/btnGenerateOtp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/send_message_on_phone_number"
             android:textSize="20sp" />
 
@@ -71,6 +71,7 @@
             android:id="@+id/etEnteredRecivedOtp"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:textColor="@color/black"
             android:paddingStart="16dp"

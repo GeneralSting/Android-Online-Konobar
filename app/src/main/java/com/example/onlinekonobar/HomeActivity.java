@@ -8,8 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.onlinekonobar.Models.Cafe;
+import com.example.onlinekonobar.Models.DrinkBill;
 import com.example.onlinekonobar.Models.Employee;
 import com.example.onlinekonobar.databinding.ActivityHomeBinding;
+import com.example.onlinekonobar.ui.cart.CartViewModel;
 import com.example.onlinekonobar.ui.menu.MenuViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -31,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
@@ -44,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
     NavigationView navigationView;
 
     private MenuViewModel menuViewModel;
+    private CartViewModel cartViewModel;
 
     //for firebase
     private FirebaseAuth mAuth;
@@ -80,8 +84,9 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot childSnapshot: snapshot.getChildren())
                 {
-                    if(recivedAdmin.equals(childSnapshot.getKey()))
-                    {
+                    if(recivedAdmin.equals(childSnapshot.getKey())) {
+                        cartViewModel = new ViewModelProvider(HomeActivity.this).get(CartViewModel.class);
+                        cartViewModel.setEmployeeId(recivedAdmin);
                         employee = childSnapshot.getValue(Employee.class);
                         View headerView = navigationView.getHeaderView(0);
                         TextView tvAdminName = (TextView) headerView.findViewById(R.id.tvNavHeaderAdminName);
@@ -108,8 +113,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot childSnapshot: snapshot.getChildren())
                 {
-                    if(employee.getCafeId().equals(childSnapshot.getKey()))
-                    {
+                    if(employee.getCafeId().equals(childSnapshot.getKey())) {
                         //liveData for setting logged cafe employee
                         MenuViewModel menuViewModel = new ViewModelProvider(HomeActivity.this).get(MenuViewModel.class);
                         menuViewModel.setCafeId(childSnapshot.getKey());
@@ -178,7 +182,16 @@ public class HomeActivity extends AppCompatActivity {
         binding.appBarHome2.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "U košarici je :" + " 0 proizvoda", Snackbar.LENGTH_LONG)
+                int cartDrinksCounter = 0;
+                cartViewModel = new ViewModelProvider(HomeActivity.this).get(CartViewModel.class);
+                HashMap<String, DrinkBill> addedCartDrinks = cartViewModel.getDrinksInCart().getValue();
+                if (addedCartDrinks != null && !addedCartDrinks.isEmpty()) {
+                    for (String key : addedCartDrinks.keySet()) {
+                        DrinkBill drinkBill = addedCartDrinks.get(key);
+                        cartDrinksCounter += drinkBill.getDrinkAmount();
+                    }
+                }
+                Snackbar.make(view, "U košarici je : " + cartDrinksCounter + " proizvoda", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
