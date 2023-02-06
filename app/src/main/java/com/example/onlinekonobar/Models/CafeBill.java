@@ -9,13 +9,16 @@ public class CafeBill {
     String cafeBillTotalPrice;
     int cafeBillProductsAmount;
     String cafeBillEmployee;
+    Integer cafeBillTableNumber;
     HashMap<String, DrinkBill> cafeBillDrinks;
 
-    public CafeBill(String cafeBillDate, String cafeBillTotalPrice, int cafeBillProductsAmount, String cafeBillEmployee, HashMap<String, DrinkBill> cafeBillDrinks) {
+    public CafeBill(String cafeBillDate, String cafeBillTotalPrice, int cafeBillProductsAmount, String cafeBillEmployee,
+                    Integer cafeBillTableNumber, HashMap<String, DrinkBill> cafeBillDrinks) {
         this.cafeBillDate = cafeBillDate;
         this.cafeBillTotalPrice = cafeBillTotalPrice;
         this.cafeBillProductsAmount = cafeBillProductsAmount;
         this.cafeBillEmployee = cafeBillEmployee;
+        this.cafeBillTableNumber = cafeBillTableNumber;
         this.cafeBillDrinks = cafeBillDrinks;
     }
 
@@ -49,6 +52,14 @@ public class CafeBill {
 
     public void setCafeBillEmployee(String cafeBillEmployee) {
         this.cafeBillEmployee = cafeBillEmployee;
+    }
+
+    public Integer getCafeBillTableNumber() {
+        return cafeBillTableNumber;
+    }
+
+    public void setCafeBillTableNumber(Integer cafeBillTableNumber) {
+        this.cafeBillTableNumber = cafeBillTableNumber;
     }
 
     public HashMap<String, DrinkBill> getCafeBillDrinks() {

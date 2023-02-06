@@ -6,14 +6,25 @@ import androidx.lifecycle.ViewModel;
 
 public class SettingsViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private final MutableLiveData<Integer> rvSettingsDisplayed = new MutableLiveData<Integer>();
 
-    public SettingsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+    public LiveData<Integer> getRvSettingsDisplayed() {
+        return rvSettingsDisplayed;
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void setRvSettingsDisplayed(Integer value) {
+        rvSettingsDisplayed.setValue(value);
     }
+
+
+    private final MutableLiveData<Boolean> settingsChangeDisplayed = new MutableLiveData<Boolean>();
+
+    public LiveData<Boolean> getSettingsChangeDisplayed() {
+        return settingsChangeDisplayed;
+    }
+
+    public void setSettingsChangeDisplayed(Boolean value) {
+        settingsChangeDisplayed.setValue(value);
+    }
+
 }

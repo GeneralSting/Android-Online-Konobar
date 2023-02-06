@@ -19,11 +19,18 @@
     <string name="send_message_on_phone_number">Send phone number</string>
     <string name="Verify_otp">Verify OTP</string>
     <string name="phone_number_validation_failed">Enter valid phone Number</string>
-    <string name="phone_number_not_sent">Error! Please enter phone number.</string>
+    <string name="phone_number_not_sent">Please enter your number independently.</string>
     <string name="login_verification_failed">Verification Failed! Check entered number.</string>
     <string name="login_code_sent">Code Sent!</string>
     <string name="login_empty_otp">Enter OTP code!</string>
     <string name="login_wrong_otp">Wrong OTP code!</string>
+    <string name="login_user_not_found">Your number was not found, please try again</string>
+    <string name="unknown_error">Error!</string>
+    <string name="logged_employee_not_found">We did not find your data, log out and try again. In the current state, errors are possible during your work!</string>
+    <string name="logged_employee_cafe_not_found">We did not find cafe data, log out and try again. In the current state, errors are possible during your work!</string>
+    <string name="unknown_employee_cafe_name">We could not find the name of the cafe you work in, please log out and try again. Possible errors in the continuation of your work!</string>
+    <string name="cart_products_number">It is in the cart:</string>
+    <string name="cart_products_txt">products</string>
     <string name="title_activity_home">Home2</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -43,6 +50,39 @@
     <string name="cart_bill_price_empty">0.00€</string>
     <string name="cart_bill_amount_text">Products</string>
     <string name="cafe_bill_completed">Successfully saved bill:</string>
-
+    <string name="cart_dialog_title_text">Select table number</string>
+    <string name="cart_dialog_positive_text">Make bill</string>
+    <string name="cart_dialog_negative_text">Cancel</string>
+    <string name="settings_update_drinks_text">Update menu</string>
+    <string name="settings_add_drink_text">Add new drink</string>
+    <string name="settings_update_tables_text">Update tables number</string>
+    <string name="settings_dialog_title_text">Enter new tables state</string>
+    <string name="settings_dialog_current_tables_txt">Currently tables:</string>
+    <string name="settings_dialog_new_tables_number_txt">New state:</string>
+    <string name="settings_dialog_hint">15</string>
+    <string name="settings_dialog_starting_zero">The starting digit cannot be 0</string>
+    <string name="settings_dialog_zero_greater">Enter a value greater than 0</string>
+    <string name="settings_dialog_successful">Changed successfully</string>
+    <string name="settings_dialog_drink_name">Drink name</string>
+    <string name="settings_dialog_drink_description">Drink description</string>
+    <string name="settings_dialog_drink_price">Drink price</string>
+    <string name="settings_dialog_drink_name_overflow">Name accepts 25 characters</string>
+    <string name="settings_dialog_drink_description_overflow">Description accepts 50 characters</string>
+    <string name="settings_dialog_drink_price_overflow">Max drink price is 999999.99</string>
+    <string name="settings_bottom_dialog_camera">Camera</string>
+    <string name="settings_bottom_dialog_gallery">Gallery</string>
+    <string name="settings_dialog_add_drink_title">New drink for category:</string>
+    <string name="settings_new_drink_sucess">New drink successfully added</string>
+    <string name="settings_new_drink_failure">An error occurred!</string>
+    <string name="settings_new_drink_uploading">Adding a new drink…</string>
+    <string name="settings_new_drink_image_failure">Drink image error, new drink not created!</string>
+    <string name="settings_new_drink_price_incorrect_input">Incorrect price input</string>
+    <string name="settings_new_drink_image_upload_failed">Failed to save image</string>
+    <string name="settings_new_drink_image_download_failed">Failed to get image</string>
+    <string name="euro_sign" translatable="false">€</string>
+    <string name="drink_deleted">Drink Deleted!</string>
+    <string name="drink_name_update_condition">Drink name 1–25 characters</string>
+    <string name="drink_description_update_condition">Drink description 1–50 characters</string>
+    <string name="drink_price_update_condition">Drink price 0–999999.99€</string>
 
 </resources>

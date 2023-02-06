@@ -10,9 +10,11 @@ import android.widget.Toast;
 import com.example.onlinekonobar.Models.Cafe;
 import com.example.onlinekonobar.Models.DrinkBill;
 import com.example.onlinekonobar.Models.Employee;
+import com.example.onlinekonobar.Models.ToastMessage;
 import com.example.onlinekonobar.databinding.ActivityHomeBinding;
 import com.example.onlinekonobar.ui.cart.CartViewModel;
 import com.example.onlinekonobar.ui.menu.MenuViewModel;
+import com.example.onlinekonobar.ui.settings.SettingsViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -38,22 +40,30 @@ import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
+    //Activity view
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
-
-    private static final int TIME_DELAY = 2000;
-    private static long back_pressed;
-    private Boolean isCategoriesDisplayed = true;
     NavigationView navigationView;
 
-    private MenuViewModel menuViewModel;
-    private CartViewModel cartViewModel;
-
-    //for firebase
-    private FirebaseAuth mAuth;
+    //gloabl variables/objects
+    private Boolean isCategoriesDisplayed = true;
     Employee employee = new Employee();
     Cafe cafe = new Cafe();
     String recivedAdmin;
+    Boolean employeeFounded, employeeCafeNameFounded;
+    ToastMessage toastMessage;
+
+    //firebase
+    private FirebaseAuth mAuth;
+
+    //viewModels
+    private MenuViewModel menuViewModel;
+    private CartViewModel cartViewModel;
+    private SettingsViewModel settingsViewModel;
+
+    //other
+    private static final int TIME_DELAY = 2000;
+    private static long back_pressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,58 +87,71 @@ public class HomeActivity extends AppCompatActivity {
         finish();
     }
 
-    private void getAdmin(NavigationView navigationView) {
+    private void getEmployee(NavigationView navigationView) {
         DatabaseReference cafesEmployeesRef = FirebaseDatabase.getInstance().getReference("cafesEmployees");
-        cafesEmployeesRef.addValueEventListener(new ValueEventListener() {
+        //addListenerForSingleValueEvent -> only once will go through database, we do not need continuously listen here
+        cafesEmployeesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot childSnapshot: snapshot.getChildren())
-                {
-                    if(recivedAdmin.equals(childSnapshot.getKey())) {
+                for(DataSnapshot employeeSnapshot: snapshot.getChildren()) {
+                    if(recivedAdmin.equals(employeeSnapshot.getKey())) {
+                        employeeFounded = true;
+                        //liveData for setting logged cafe employee
                         cartViewModel = new ViewModelProvider(HomeActivity.this).get(CartViewModel.class);
                         cartViewModel.setEmployeeId(recivedAdmin);
-                        employee = childSnapshot.getValue(Employee.class);
+                        employee = employeeSnapshot.getValue(Employee.class);
                         View headerView = navigationView.getHeaderView(0);
                         TextView tvAdminName = (TextView) headerView.findViewById(R.id.tvNavHeaderAdminName);
                         TextView tvAdminGmail = (TextView) headerView.findViewById(R.id.tvNavHeaderAdminGmail);
                         tvAdminName.setText(employee.getName() + " " + employee.getLastname());
                         tvAdminGmail.setText(employee.getGmail());
-                        //remove listener, error can be caused when database is changed
-                        cafesEmployeesRef.removeEventListener(this);
+                        employeeCafeNameFounded = false;
                         getCafeName(navigationView);
                     }
+                }
+                if(!employeeFounded) {
+                    toastMessage.showToast(getResources().getString(R.string.logged_employee_not_found), 0);
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(HomeActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                toastMessage.showToast(getResources().getString(R.string.unknown_error), 0);
             }
         });
     }
 
     private void getCafeName(NavigationView navigationView) {
         DatabaseReference cafesRef = FirebaseDatabase.getInstance().getReference("cafes");
+        //addValueEventListener -> to update changes on new cafe data especially cafeTables
         cafesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot childSnapshot: snapshot.getChildren())
-                {
-                    if(employee.getCafeId().equals(childSnapshot.getKey())) {
-                        //liveData for setting logged cafe employee
+                for(DataSnapshot cafeSnapshopt: snapshot.getChildren()) {
+                    if(employee.getCafeId().equals(cafeSnapshopt.getKey())) {
+                        employeeCafeNameFounded = true;
+                        //liveData for setting logged cafe employee's cafe-id
                         MenuViewModel menuViewModel = new ViewModelProvider(HomeActivity.this).get(MenuViewModel.class);
-                        menuViewModel.setCafeId(childSnapshot.getKey());
-                        cafe = childSnapshot.getValue(Cafe.class);
+                        menuViewModel.setCafeId(cafeSnapshopt.getKey());
+                        cafe = cafeSnapshopt.getValue(Cafe.class);
+                        //LiveData for setting cafe tables number:
+                        cartViewModel = new ViewModelProvider(HomeActivity.this).get(CartViewModel.class);
+                        cartViewModel.setCafeTables(cafe.getCafeTables());
+                        cartViewModel.setCafeId(cafeSnapshopt.getKey());
                         View headerView = navigationView.getHeaderView(0);
+                        if(cafe.getCafeName().equals("")) {
+                            toastMessage.showToast(getResources().getString(R.string.unknown_employee_cafe_name), 0);
+                        }
                         TextView tvAdminCafe = (TextView) headerView.findViewById(R.id.tvNavHeaderAdminCafe);
                         tvAdminCafe.setText(cafe.getCafeName());
-                        //remove listener, error can be caused when database is changed
-                        cafesRef.removeEventListener(this);
                     }
+                }
+                if(!employeeCafeNameFounded) {
+                    toastMessage.showToast(getResources().getString(R.string.logged_employee_cafe_not_found), 0);
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(HomeActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                toastMessage.showToast(getResources().getString(R.string.unknown_error), 0);
             }
         });
     }
@@ -150,7 +173,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        toastMessage = new ToastMessage(this);
         //liveData for onBackPressed
+        settingsViewModel = new ViewModelProvider(HomeActivity.this).get(SettingsViewModel.class);
         menuViewModel = new ViewModelProvider(HomeActivity.this).get(MenuViewModel.class);
         final Observer<Boolean> displayingCategoriesObserver = new Observer<Boolean>() {
             @Override
@@ -191,13 +216,14 @@ public class HomeActivity extends AppCompatActivity {
                         cartDrinksCounter += drinkBill.getDrinkAmount();
                     }
                 }
-                Snackbar.make(view, "U košarici je : " + cartDrinksCounter + " proizvoda", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, getResources().getString(R.string.cart_products_number) + " " + cartDrinksCounter + " " +
+                                getResources().getString(R.string.cart_products_txt), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-
         //firebasae init
-        getAdmin(navigationView);
+        employeeFounded = false;
+        getEmployee(navigationView);
     }
 
     @Override
@@ -211,13 +237,35 @@ public class HomeActivity extends AppCompatActivity {
                     logout();
                 }
                 else {
-                    Toast.makeText(this, getResources().getString(R.string.back_button_pressed), Toast.LENGTH_SHORT).show();
+                    toastMessage.showToast(getResources().getString(R.string.back_button_pressed), 0);
                 }
                 back_pressed = System.currentTimeMillis();
             }
             else {
                 MenuViewModel menuViewModel = new ViewModelProvider(HomeActivity.this).get(MenuViewModel.class);
                 menuViewModel.setDisplayingCategories(true);
+            }
+        }
+        else if(navigationView.getMenu().findItem(R.id.nav_settings).isChecked()) {
+            switch (settingsViewModel.getRvSettingsDisplayed().getValue()) {
+                case 0:
+                    if(back_pressed + TIME_DELAY > System.currentTimeMillis()) {
+                        super.onBackPressed();
+                        logout();
+                    }
+                    else {
+                        toastMessage.showToast(getResources().getString(R.string.back_button_pressed), 0);
+                    }
+                    back_pressed = System.currentTimeMillis();
+                    break;
+                case 1:
+                    settingsViewModel.setSettingsChangeDisplayed(true);
+                    settingsViewModel.setRvSettingsDisplayed(0);
+                    break;
+                case 2:
+                    settingsViewModel.setSettingsChangeDisplayed(true);
+                    settingsViewModel.setRvSettingsDisplayed(1);
+                    break;
             }
         }
         //menu_nav is not displayed
@@ -227,7 +275,7 @@ public class HomeActivity extends AppCompatActivity {
                 logout();
             }
             else {
-                Toast.makeText(this, getResources().getString(R.string.back_button_pressed), Toast.LENGTH_SHORT).show();
+                toastMessage.showToast(getResources().getString(R.string.back_button_pressed), 0);
             }
             back_pressed = System.currentTimeMillis();
         }

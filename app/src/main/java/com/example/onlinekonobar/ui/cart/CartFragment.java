@@ -1,5 +1,7 @@
 package com.example.onlinekonobar.ui.cart;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -19,6 +22,7 @@ import com.example.onlinekonobar.Interfaces.CallBackCart;
 import com.example.onlinekonobar.Models.CafeBill;
 import com.example.onlinekonobar.Models.Drink;
 import com.example.onlinekonobar.Models.DrinkBill;
+import com.example.onlinekonobar.Models.ToastMessage;
 import com.example.onlinekonobar.R;
 import com.example.onlinekonobar.databinding.FragmentCartBinding;
 import com.google.firebase.database.DataSnapshot;
@@ -28,26 +32,32 @@ import com.google.firebase.database.FirebaseDatabase;import com.google.firebase.
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
 public class CartFragment extends Fragment implements CallBackCart {
-
+    //fragment views
     private FragmentCartBinding binding;
-    CartViewModel cartViewModel;
-    DatabaseReference drinksCategoryRef, cafeCategoriesRef, newCafeBillRef;
-    HashMap<String, DrinkBill> drinksInCart, modifiedDrinksInCart;
     RecyclerView recyclerCartDrinks;
     TextView txtBillAmount, txtBillPrice;
     Button btnAcceptBill;
     ImageButton btnCancelBill;
-    String cafeBillTotalPrice;
-    int cafeBillProductsAmount;
-    CartAdapter cartAdapter;
+
+    //gloabl variables/objects
+    HashMap<String, DrinkBill> drinksInCart, modifiedDrinksInCart;
     HashMap<String, DrinkBill> cafeBillDrinks;
+    int cafeBillProductsAmount;
+    String cafeBillTotalPrice;
+    ToastMessage toastMessage;
+
+    //firebase
+    DatabaseReference drinksCategoryRef, cafeCategoriesRef, newCafeBillRef;
+
+    //other
+    CartViewModel cartViewModel;
+    CartAdapter cartAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +65,8 @@ public class CartFragment extends Fragment implements CallBackCart {
 
         binding = FragmentCartBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        toastMessage = new ToastMessage(getActivity());
 
         btnAcceptBill = (Button)binding.cartBillAccept;
         btnCancelBill = (ImageButton)binding.cartBillCancel;
@@ -79,7 +91,7 @@ public class CartFragment extends Fragment implements CallBackCart {
         btnAcceptBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                completePurchase();
+                enterTable();
             }
         });
 
@@ -99,7 +111,7 @@ public class CartFragment extends Fragment implements CallBackCart {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getActivity(), "Error!", Toast.LENGTH_SHORT).show();
+                toastMessage.showToast(getResources().getString(R.string.unknown_error), 0);
             }
         });
     }
@@ -147,7 +159,7 @@ public class CartFragment extends Fragment implements CallBackCart {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getActivity(), "Error!", Toast.LENGTH_SHORT).show();
+                toastMessage.showToast(getResources().getString(R.string.unknown_error), 0);
             }
         });
     }
@@ -178,7 +190,7 @@ public class CartFragment extends Fragment implements CallBackCart {
             txtBillPrice = (TextView)binding.cartBillPrice;
             Float billTotalPrice = 0f;
             int billProductsAmount = 0;
-            DecimalFormat decimalFormat = new DecimalFormat("#.00");
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
             for (String key : recivedCartDrinks.keySet()) {
                 DrinkBill drinkBill = recivedCartDrinks.get(key);
                 billTotalPrice += (Float)drinkBill.getDrinkTotalPrice();
@@ -217,7 +229,41 @@ public class CartFragment extends Fragment implements CallBackCart {
         updateCartDrinks(new HashMap<>());
     }
 
-    public void completePurchase() {
+    public void enterTable() {
+        // Set up the view
+        View selectTableView = getLayoutInflater().inflate(R.layout.cart_dialog_input, null);
+        NumberPicker npTableNumber = selectTableView.findViewById(R.id.cartDialogInput);
+        npTableNumber.setMinValue(1);
+        npTableNumber.setMaxValue(cartViewModel.getCafeTables().getValue());
+        Button tableDialogAccept = selectTableView.findViewById(R.id.cartDialogAccept);
+        Button tableDialogCancel = selectTableView.findViewById(R.id.cartDialogCancel);
+        // Dialog modal for selecting table number
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setView(selectTableView)
+                .setTitle(getResources().getString(R.string.cart_dialog_title_text))
+                .create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                tableDialogAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        completePurchase(npTableNumber.getValue());
+                        dialog.dismiss();
+                    }
+                });
+                tableDialogCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
+    public void completePurchase(Integer tableNumber) {
         String cafeId = cartViewModel.getCafeId().getValue();
         newCafeBillRef = FirebaseDatabase.getInstance().getReference("cafes").child(cafeId).child("cafeBills");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
@@ -232,9 +278,9 @@ public class CartFragment extends Fragment implements CallBackCart {
             databaseCafeBillDrinks.put(databaseDrinkBill.getDrinkId(), databaseDrinkBill);
         }
         CafeBill cafeBill = new CafeBill(currentDateTime, cafeBillTotalPrice, cafeBillProductsAmount,
-                cartViewModel.getEmployeeId().getValue(), databaseCafeBillDrinks);
+                cartViewModel.getEmployeeId().getValue(), tableNumber, databaseCafeBillDrinks);
         String key = newCafeBillRef.push().getKey();
-        Toast.makeText(getActivity(), getResources().getString(R.string.cafe_bill_completed) + " " + key, Toast.LENGTH_SHORT).show();
+        toastMessage.showToast(getResources().getString(R.string.cafe_bill_completed) + " " + key, 0);
         removeCartDrinks();
         newCafeBillRef.child(key).setValue(cafeBill);
     }

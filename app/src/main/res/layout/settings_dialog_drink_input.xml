@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="16dp"
+    android:paddingBottom="24dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/custom_layout_rounded"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <ImageView
+            android:id="@+id/settingsDialogDrinkImage"
+            android:layout_width="100dp"
+            android:layout_height="133dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/add_drink_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/vglStartSection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearLayoutCompat3"
+            android:layout_width="156dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/settingsDialogDrinkImage"
+            app:layout_constraintStart_toStartOf="@+id/vglStartSection"
+            app:layout_constraintTop_toTopOf="@+id/settingsDialogDrinkImage">
+
+
+            <EditText
+                android:id="@+id/settingsDialogDrinkName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:maxLength="25"
+                android:hint="@string/settings_dialog_drink_name"
+                app:layout_constraintEnd_toStartOf="@+id/vglEndSection"
+                app:layout_constraintStart_toStartOf="@+id/vglStartSection"
+                app:layout_constraintTop_toTopOf="@+id/settingsDialogDrinkImage" />
+
+            <EditText
+                android:id="@+id/settingsDialogDrinkDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_marginTop="2dp"
+                android:maxLength="50"
+                android:hint="@string/settings_dialog_drink_description"
+                app:layout_constraintEnd_toStartOf="@+id/vglEndSection"
+                app:layout_constraintStart_toStartOf="@+id/vglStartSection"
+                app:layout_constraintTop_toBottomOf="@+id/settingsDialogDrinkName" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/settingsDialogDrinkPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/settings_dialog_drink_price"
+                    android:textSize="16dp"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintEnd_toStartOf="@+id/vglEndSection"
+                    app:layout_constraintStart_toStartOf="@+id/vglStartSection"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsDialogDrinkDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="€" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/settingsDialogDrinkImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/vglEndSection"
+            app:layout_constraintTop_toTopOf="@+id/settingsDialogDrinkImage">
+
+
+            <Button
+                android:id="@+id/drinkAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/drink_add_button"
+                android:includeFontPadding="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="+"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/drinkAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="0"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/drinkRemove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/drink_remove_button"
+                android:includeFontPadding="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="-"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/vglSecondSection" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vglStartSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vglEndSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/settingsDialogDrinkCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/drink_remove_button"
+        android:text="@string/cart_dialog_negative_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <Button
+        android:id="@+id/settingsDialogDrinkAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/drink_add_button"
+        android:text="@string/cart_bill_confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

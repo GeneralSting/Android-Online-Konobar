@@ -20,11 +20,18 @@
     <string name="send_message_on_phone_number">Pošalji broj</string>
     <string name="Verify_otp">Potvrdi PIN</string>
     <string name="phone_number_validation_failed">Neispravan oblik broja mobitela</string>
-    <string name="phone_number_not_sent">Greška! Molimo samostalno unesite broj.</string>
+    <string name="phone_number_not_sent">Molimo samostalno unesite Vaš broj.</string>
     <string name="login_verification_failed">Neuspjela Provjera! Provjerite točnost broja.</string>
     <string name="login_code_sent">PIN je poslan!</string>
     <string name="login_empty_otp">Unesite PIN!</string>
     <string name="login_wrong_otp">Netočan PIN!</string>
+    <string name="login_user_not_found">Nismo pronašli vaš broj, probajte ponovno</string>
+    <string name="unknown_error">Pogreška se dogodila!</string>
+    <string name="logged_employee_not_found">Nismo pronašli Vaše podatke, Odjavite se te pokušajte ponovno. Trenutnim stanjem moguće su pogreške tijekom Vašeg rada!</string>
+    <string name="logged_employee_cafe_not_found">Nismo pronašli podatke kafića, Odjavite se te pokušajte ponovno. Trenutnim stanjem moguće su pogreške tijekom Vašeg rada!</string>
+    <string name="unknown_employee_cafe_name">Nismo uspjeli pronaći naziv kafića u kojem radite, odjavite se i probajte ponovno. Moguće greške u nastavku Vašeg rada!</string>
+    <string name="cart_products_number">U košarici je:</string>
+    <string name="cart_products_txt">proizvoda</string>
     <string name="nav_menu">Narudžba</string>
     <string name="nav_cart">Košarica</string>
     <string name="nav_settings">Postavke</string>
@@ -43,9 +50,38 @@
     <string name="cart_bill_price_empty">0.00€</string>
     <string name="cart_bill_amount_text">Proizvoda</string>
     <string name="cafe_bill_completed">Uspješno spremljen račun:</string>
-
-
-
-
+    <string name="cart_dialog_title_text">Odaberite broj stola</string>
+    <string name="cart_dialog_positive_text">Završi račun</string>
+    <string name="cart_dialog_negative_text">Odustani</string>
+    <string name="settings_update_drinks_text">Ažuriraj meni</string>
+    <string name="settings_add_drink_text">Dodaj novo piće</string>
+    <string name="settings_update_tables_text">Ažuriraj broj stolova</string>
+    <string name="settings_dialog_title_text">Unesite novo stanje stolova</string>
+    <string name="settings_dialog_current_tables_txt">Trenutno stolova:</string>
+    <string name="settings_dialog_new_tables_number_txt">Novo stanje:</string>
+    <string name="settings_dialog_hint">15</string>
+    <string name="settings_dialog_starting_zero">Početna znamenka ne može biti 0</string>
+    <string name="settings_dialog_zero_greater">Unesite vrijednost veću od 0</string>
+    <string name="settings_dialog_successful">Uspješno promijenjeno</string>
+    <string name="settings_dialog_drink_name">Ime pića</string>
+    <string name="settings_dialog_drink_description">Opis pića</string>
+    <string name="settings_dialog_drink_price">Cijena pića</string>
+    <string name="settings_dialog_drink_name_overflow">Najduže moguće ime je 25 zankova</string>
+    <string name="settings_dialog_drink_description_overflow">Najduže mogući opis je 50 zankova</string>
+    <string name="settings_dialog_drink_price_overflow">Najveći mogući iznos je 999999.99</string>
+    <string name="settings_bottom_dialog_camera">Kamera</string>
+    <string name="settings_bottom_dialog_gallery">Galerija</string>
+    <string name="settings_dialog_add_drink_title">Novo piće u kategoriji:</string>
+    <string name="settings_new_drink_sucess">Novo piće uspješno dodano</string>
+    <string name="settings_new_drink_failure">Dogodila se pogreška!</string>
+    <string name="settings_new_drink_uploading">Dodavanje novog pića…</string>
+    <string name="settings_new_drink_image_failure">Greška slike pića, novo piće nije kreirano!</string>
+    <string name="settings_new_drink_price_incorrect_input">Neispravan unos cijene!</string>
+    <string name="settings_new_drink_image_upload_failed">Greška! Neuspješno spremanje slike</string>
+    <string name="settings_new_drink_image_download_failed">Greška! Neuspješno dohvaćanje slike</string>
+    <string name="drink_deleted">Piće obrisano!</string>
+    <string name="drink_name_update_condition">Ime pića 1–25 znakova</string>
+    <string name="drink_description_update_condition">Opis pića 1–50 znakova</string>
+    <string name="drink_price_update_condition">Cijena pića 0–999999.99€</string>
 
 </resources>

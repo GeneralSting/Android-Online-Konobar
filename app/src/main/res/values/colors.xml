@@ -20,10 +20,12 @@
     <color name="white">#fff</color>
     <color name="dark_gray">#a9a9a9</color>
     <color name="overlay_background">#7f333639</color>
+    <color name="overlay_settings_background">#e6333639</color>
     <color name="overlay_action_bar">#0e0d0e</color>
     <color name="drink_add_button">#44EA63</color>
     <color name="bill_disabled_button">#d8fcdf</color>
     <color name="bill_disabled_text">#878787</color>
     <color name="drink_remove_button">#ea4444</color>
+    <color name="danger_overlay">#40ea4444</color>
 
 </resources>

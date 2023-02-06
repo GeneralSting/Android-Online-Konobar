@@ -25,14 +25,14 @@ public class DrinkViewHolder extends RecyclerView.ViewHolder {
     public DrinkViewHolder(View itemView) {
         super(itemView);
 
-        txtDrinkName = (TextView) itemView.findViewById(R.id.drink_name);
-        txtDrinkDescription = (TextView) itemView.findViewById(R.id.drink_description);
-        txtDrinkPrice = (TextView) itemView.findViewById(R.id.drink_price);
-        drinkImageView = (ImageView) itemView.findViewById(R.id.drink_image);
+        txtDrinkName = (TextView) itemView.findViewById(R.id.drinkName);
+        txtDrinkDescription = (TextView) itemView.findViewById(R.id.drinkDescription);
+        txtDrinkPrice = (TextView) itemView.findViewById(R.id.drinkPrice);
+        drinkImageView = (ImageView) itemView.findViewById(R.id.drinkImage);
 
-        txtDrinkAddedNumber = (TextView) itemView.findViewById(R.id.drink_added_number);
-        btnDrinkAdd = (Button) itemView.findViewById(R.id.drink_add);
-        btnDrinkRemove = (Button) itemView.findViewById(R.id.drink_remove);
+        txtDrinkAddedNumber = (TextView) itemView.findViewById(R.id.drinkAmount);
+        btnDrinkAdd = (Button) itemView.findViewById(R.id.drinkAdd);
+        btnDrinkRemove = (Button) itemView.findViewById(R.id.drinkRemove);
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {

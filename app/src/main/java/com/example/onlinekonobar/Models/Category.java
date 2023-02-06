@@ -5,9 +5,18 @@ public class Category {
     String image;
     String name;
 
+    String categoryId;
+
     public Category() {}
 
     public Category(String description, String image, String name) {
+        this.description = description;
+        this.image = image;
+        this.name = name;
+    }
+
+    public Category(String categoryId,String description, String image, String name) {
+        this.categoryId = categoryId;
         this.description = description;
         this.image = image;
         this.name = name;
@@ -35,5 +44,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 }

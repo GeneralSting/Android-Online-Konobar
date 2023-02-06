@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="32dp">
+
+    <TextView
+        android:id="@+id/txtCurrentTables"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="@string/settings_dialog_current_tables_txt"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/vglHalfDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtNewTablesNumber"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="@string/settings_dialog_new_tables_number_txt"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/vglHalfDivider"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/settingsCurrentTablesNumber"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:maxLength="4"
+        android:focusable="false"
+        android:enabled="false"
+        android:cursorVisible="false"
+        app:layout_constraintEnd_toStartOf="@+id/vglHalfDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCurrentTables" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_keyboard_double_arrow_right_32"
+        app:layout_constraintBottom_toBottomOf="@+id/settingsNewTablesNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settingsNewTablesNumber" />
+
+    <EditText
+        android:id="@+id/settingsNewTablesNumber"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:digits="0123456789"
+        android:maxLength="4"
+        android:inputType="number"
+        android:gravity="center"
+        android:hint="@string/settings_dialog_hint"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/vglHalfDivider"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewTablesNumber" />
+
+    <Button
+        android:id="@+id/settingsDialogCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/drink_remove_button"
+        android:layout_marginTop="32dp"
+        android:text="@string/cart_dialog_negative_text"
+        app:layout_constraintEnd_toEndOf="@+id/settingsCurrentTablesNumber"
+        app:layout_constraintStart_toStartOf="@+id/settingsCurrentTablesNumber"
+        app:layout_constraintTop_toBottomOf="@+id/settingsCurrentTablesNumber" />
+
+    <Button
+        android:id="@+id/settingsDialogAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/drink_add_button"
+        android:layout_marginTop="32dp"
+        android:text="@string/cart_bill_confirm"
+        app:layout_constraintEnd_toEndOf="@+id/settingsNewTablesNumber"
+        app:layout_constraintStart_toStartOf="@+id/settingsNewTablesNumber"
+        app:layout_constraintTop_toBottomOf="@+id/settingsNewTablesNumber" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vglHalfDivider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

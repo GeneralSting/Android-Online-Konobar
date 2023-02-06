@@ -6,6 +6,7 @@ import java.util.Map;
 public class Cafe {
     String cafeLocation;
     String cafeName;
+    Integer cafeTables;
     String cafeOwnerGmail;
     String getCafeOwnerLastname;
     String cafeOwnerName;
@@ -18,9 +19,10 @@ public class Cafe {
         // Default constructor required for calls to DataSnapshot.getValue(Cafe.class)
     }
 
-    public Cafe(String cafeLocation, String cafeName, String cafeOwnerGmail, String getCafeOwnerLastname, String cafeOwnerName, String cafeOwnerOib, String cafeOwnerPhoneNumber, Map<String, Drink> cafeDrinks) {
+    public Cafe(String cafeLocation, String cafeName, Integer cafeTables, String cafeOwnerGmail, String getCafeOwnerLastname, String cafeOwnerName, String cafeOwnerOib, String cafeOwnerPhoneNumber, Map<String, Drink> cafeDrinks) {
         this.cafeLocation = cafeLocation;
         this.cafeName = cafeName;
+        this.cafeTables = cafeTables;
         this.cafeOwnerGmail = cafeOwnerGmail;
         this.getCafeOwnerLastname = getCafeOwnerLastname;
         this.cafeOwnerName = cafeOwnerName;
@@ -91,5 +93,21 @@ public class Cafe {
 
     public void setCafeDrinks(Map<String, Drink> cafeDrinks) {
         this.cafeDrinks = cafeDrinks;
+    }
+
+    public Integer getCafeTables() {
+        return cafeTables;
+    }
+
+    public void setCafeTables(Integer cafeTables) {
+        this.cafeTables = cafeTables;
+    }
+
+    public Map<String, CafeCategory> getCafeDrinksCategories() {
+        return cafeDrinksCategories;
+    }
+
+    public void setCafeDrinksCategories(Map<String, CafeCategory> cafeDrinksCategories) {
+        this.cafeDrinksCategories = cafeDrinksCategories;
     }
 }

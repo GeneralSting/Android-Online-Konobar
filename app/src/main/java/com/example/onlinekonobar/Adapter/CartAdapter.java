@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +42,7 @@ public class CartAdapter extends RecyclerView.Adapter<DrinkBillViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DrinkBillViewHolder holder, int position) {
         int i = 0;
-        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         HashMap<String, DrinkBill> newCartDrinks = new HashMap<>();
         for (Map.Entry<String, DrinkBill> entry : cartDrinks.entrySet()) {
             if(position == i){

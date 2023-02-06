@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:layout_margin="8dp"
@@ -18,7 +17,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/drink_image"
+            android:id="@+id/drinkImage"
             android:layout_width="100dp"
             android:layout_height="133dp"
             android:layout_marginStart="16dp"
@@ -30,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/drink_name"
+            android:id="@+id/drinkName"
             android:layout_width="165dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -43,23 +42,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/drink_description"
+            android:id="@+id/drinkDescription"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="TextView"
             app:layout_constraintStart_toStartOf="@+id/vglFirstSection"
-            app:layout_constraintTop_toBottomOf="@+id/drink_name" />
+            app:layout_constraintTop_toBottomOf="@+id/drinkName" />
 
         <TextView
-            android:id="@+id/drink_price"
+            android:id="@+id/drinkPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="1.8€"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/drink_image"
+            app:layout_constraintBottom_toBottomOf="@+id/drinkImage"
             app:layout_constraintStart_toStartOf="@+id/vglFirstSection" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -89,14 +88,14 @@
             android:layout_marginEnd="8dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/drink_image"
+            app:layout_constraintBottom_toBottomOf="@+id/drinkImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/vglSecondSection"
-            app:layout_constraintTop_toTopOf="@+id/drink_image">
+            app:layout_constraintTop_toTopOf="@+id/drinkImage">
 
 
             <Button
-                android:id="@+id/drink_add"
+                android:id="@+id/drinkAdd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/drink_add_button"
@@ -107,7 +106,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/drink_added_number"
+                android:id="@+id/drinkAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -117,7 +116,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/drink_remove"
+                android:id="@+id/drinkRemove"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/drink_remove_button"

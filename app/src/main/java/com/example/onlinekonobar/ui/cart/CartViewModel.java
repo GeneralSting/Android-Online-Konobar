@@ -32,6 +32,17 @@ public class CartViewModel extends ViewModel {
         cafeId.setValue(recivedCafeId);
     }
 
+    //for collecting cafe tables number
+    private final MutableLiveData<Integer> cafeTables = new MutableLiveData<Integer>();
+
+    public LiveData<Integer> getCafeTables() {
+        return cafeTables;
+    }
+
+    public void setCafeTables(Integer recivedCafeTables) {
+        cafeTables.setValue(recivedCafeTables);
+    }
+
     //for collecting employee ID
     private final MutableLiveData<String> employeeId = new MutableLiveData<String>();
 

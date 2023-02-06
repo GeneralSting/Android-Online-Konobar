@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="8dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/custom_layout_rounded"
+    app:cardBackgroundColor="@color/drink_card_view"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/settingsUpdateDrinkImage"
+            android:layout_width="100dp"
+            android:layout_height="133dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/vglSettingsUpdateFirstSection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/settingsUpdateDrinkImage"
+            app:layout_constraintStart_toStartOf="@+id/vglSettingsUpdateFirstSection"
+            app:layout_constraintTop_toTopOf="@+id/settingsUpdateDrinkImage">
+
+            <EditText
+                android:id="@+id/settingsUpdateDrinkName"
+                android:layout_width="165dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/vglSettingsUpdateFirstSection"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/settingsUpdateDrinkDescription"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@+id/vglSettingsUpdateFirstSection"
+                app:layout_constraintTop_toBottomOf="@+id/settingsUpdateDrinkName" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/settingsUpdateDrinkPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintBottom_toBottomOf="@+id/settingsUpdateDrinkImage"
+                    app:layout_constraintStart_toStartOf="@+id/vglSettingsUpdateFirstSection" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="@string/euro_sign"
+                    android:textSize="16sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vglSettingsUpdateFirstSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vglSettingsUpdateSecondSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/settingsUpdateDrinkImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/vglSettingsUpdateSecondSection"
+            app:layout_constraintTop_toTopOf="@+id/settingsUpdateDrinkImage">
+
+
+            <ImageButton
+                android:id="@+id/btnSettingsUpdateAccept"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/custom_iv_rounded_accept"
+                android:src="@drawable/ic_file_upload_24" />
+
+            <ImageButton
+                android:id="@+id/btnSettingsUpdateRemove"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/custom_iv_rounded_decline"
+                android:layout_marginTop="48dp"
+                android:src="@drawable/ic_delete_forever_24" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>
