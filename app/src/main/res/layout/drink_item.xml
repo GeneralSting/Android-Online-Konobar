@@ -45,6 +45,7 @@
             android:id="@+id/drinkDescription"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:maxLength="30"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="TextView"

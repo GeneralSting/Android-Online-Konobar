@@ -81,8 +81,19 @@
     <string name="settings_new_drink_image_download_failed">Failed to get image</string>
     <string name="euro_sign" translatable="false">€</string>
     <string name="drink_deleted">Drink Deleted!</string>
+    <string name="drink_delete_confirm">Delete this drink?</string>
     <string name="drink_name_update_condition">Drink name 1–25 characters</string>
     <string name="drink_description_update_condition">Drink description 1–50 characters</string>
     <string name="drink_price_update_condition">Drink price 0–999999.99€</string>
+    <string name="drink_same_update">No change to update</string>
+    <string name="settings_update_drink_uploading">Updating a drink…</string>
+    <string name="settings_update_drink_uploading_image">Updating a drink image…</string>
+    <string name="settings_update_uploading_failed">Action aborted, server error!</string>
+    <string name="settings_update_uploading_image_failed">Server error, unable to retrieve image!</string>
+    <string name="drink_full_description">Description for drink:</string>
+    <string name="title_activity_boss">BossActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>

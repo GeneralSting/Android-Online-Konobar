@@ -1,11 +1,15 @@
 package com.example.onlinekonobar.ui.menu;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -220,6 +224,8 @@ public class MenuFragment extends Fragment {
                 drinksCategoryRef.child(drinkId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.exists())
+                            return;
                         Drink cafeCategoryDrink = new Drink(
                                 snapshot.getKey().toString(),
                                 snapshot.child("cafeDrinkName").getValue().toString(),
@@ -241,6 +247,26 @@ public class MenuFragment extends Fragment {
                         holder.txtDrinkName.setText(cafeCategoryDrink.getCafeDrinkName());
                         holder.txtDrinkDescription.setText(cafeCategoryDrink.getCafeDrinkDescription());
                         holder.txtDrinkPrice.setText(decimalFormat.format(cafeCategoryDrink.getCafeDrinkPrice()) + "€");
+
+                        holder.txtDrinkDescription.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                TextView txtFullDescription = new TextView(getActivity());
+                                txtFullDescription.setTextSize(24);
+                                final AlertDialog fullDescriptionDialog = new AlertDialog.Builder(getActivity()).create();
+                                        fullDescriptionDialog.setView(
+                                                txtFullDescription, 90, 120, 130, 140);
+                                        fullDescriptionDialog.setTitle(
+                                                getResources().getString(R.string.drink_full_description) + " " + cafeCategoryDrink.getCafeDrinkName());
+                                fullDescriptionDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                    @Override
+                                    public void onShow(DialogInterface dialogInterface) {
+                                        txtFullDescription.setText(cafeCategoryDrink.getCafeDrinkDescription());
+                                    }
+                                });
+                                fullDescriptionDialog.show();
+                            }
+                        });
 
                         final int[] drinkCounter = {0};
                         if (addedCartDrinks != null && !addedCartDrinks.isEmpty()) {

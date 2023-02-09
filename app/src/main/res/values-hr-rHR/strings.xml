@@ -80,8 +80,15 @@
     <string name="settings_new_drink_image_upload_failed">Greška! Neuspješno spremanje slike</string>
     <string name="settings_new_drink_image_download_failed">Greška! Neuspješno dohvaćanje slike</string>
     <string name="drink_deleted">Piće obrisano!</string>
+    <string name="drink_delete_confirm">Potvrdite brisanje pića</string>
     <string name="drink_name_update_condition">Ime pića 1–25 znakova</string>
     <string name="drink_description_update_condition">Opis pića 1–50 znakova</string>
     <string name="drink_price_update_condition">Cijena pića 0–999999.99€</string>
+    <string name="drink_same_update">Nema promjene za ažuriranjem</string>
+    <string name="settings_update_drink_uploading">Ažuriranje pića…</string>
+    <string name="settings_update_drink_uploading_image">Ažuriranje slike pića…</string>
+    <string name="settings_update_uploading_failed">Radnja prekinuta, pogreška servera</string>
+    <string name="settings_update_uploading_image_failed">Pogreška servera, nemoguće dohvatiti sliku!</string>
+    <string name="drink_full_description">Opis:</string>
 
 </resources>

@@ -197,7 +197,7 @@ public class LoginActivity extends AppCompatActivity {
                     Cafe cafe = cafeSnapshot.getValue(Cafe.class);
                     if(authNumber.equals(cafe.getCafeOwnerPhoneNumber())) {
                         bossFounded = true;
-                        Toast.makeText(LoginActivity.this, cafe.getCafeOwnerName().toString(), Toast.LENGTH_SHORT).show();
+                        
                     }
                 }
                 if(!bossFounded) {

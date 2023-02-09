@@ -121,8 +121,7 @@ public class CartFragment extends Fragment implements CallBackCart {
                 .child(category).child("cafeDrinks");
         drinksCategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshotDrink)
-            {
+            public void onDataChange(@NonNull DataSnapshot snapshotDrink) {
                     for(DataSnapshot drink: snapshotDrink.getChildren()) {
                         Boolean addNewDrink = false;
                         DrinkBill addNewDrinkBill = new DrinkBill();

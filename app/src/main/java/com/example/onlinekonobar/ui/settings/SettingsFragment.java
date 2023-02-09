@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -43,6 +44,7 @@ import com.example.onlinekonobar.Filters.PriceDigitsInputFilter;
 import com.example.onlinekonobar.Interfaces.ItemClickListener;
 import com.example.onlinekonobar.Models.Category;
 import com.example.onlinekonobar.Models.Drink;
+import com.example.onlinekonobar.Models.DrinkBill;
 import com.example.onlinekonobar.Models.ToastMessage;
 import com.example.onlinekonobar.R;
 import com.example.onlinekonobar.ViewHolder.MenuViewHolder;
@@ -67,8 +69,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class SettingsFragment extends Fragment {
@@ -94,6 +98,7 @@ public class SettingsFragment extends Fragment {
     Toast toast;
     ProgressDialog progressDialog;
     DecimalFormat decimalFormat;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.CANADA);
 
     //global variables
     Boolean checkDrinkName, checkDrinkDescription, checkDrinkPrice,
@@ -121,7 +126,9 @@ public class SettingsFragment extends Fragment {
         txtSettingsUpdateMenu = binding.txtSettingsUpdateMenu;
         txtSettingsNewDrink = binding.txtSettingsNewDrink;
         rvCategories = (RecyclerView)binding.rvSettingsCategories;
+        rvCategories.setVisibility(View.GONE);
         rvCategoryDrinks = (RecyclerView)binding.rvSettingsCategoryDrinks;
+        rvCategoryDrinks.setVisibility(View.GONE);
         layoutManagerCategories = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvCategories.setLayoutManager(layoutManagerCategories);
         layoutManagerCategoryDrinks = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -133,8 +140,16 @@ public class SettingsFragment extends Fragment {
                 settingsViewModel.setSettingsChangeDisplayed(false);
                 addingNewDrink = false;
                 insertCategories(addingNewDrink);
+                //when dispalying rvCategories this text is over recycler for short peroid of time
                 txtSettingsUpdateMenu.setVisibility(View.GONE);
                 rvCategories.setVisibility(View.VISIBLE);
+                new android.os.Handler(Looper.getMainLooper()).postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                txtSettingsUpdateMenu.setVisibility(View.VISIBLE);
+                            }
+                        },
+                400);
             }
         });
 
@@ -147,6 +162,13 @@ public class SettingsFragment extends Fragment {
                 //when dispalying rvCategories this text is over recycler for short peroid of time
                 txtSettingsNewDrink.setVisibility(View.GONE);
                 rvCategories.setVisibility(View.VISIBLE);
+                new android.os.Handler(Looper.getMainLooper()).postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                txtSettingsNewDrink.setVisibility(View.VISIBLE);
+                            }
+                        },
+                        400);
             }
         });
 
@@ -221,7 +243,7 @@ public class SettingsFragment extends Fragment {
                                     @Override
                                     public void onClick(View view, int position, boolean isLongClick) {
                                         rvCategories.setVisibility(View.GONE);
-                                        checkCafeCategories(category);
+                                        checkCafeCategoryDrinks(category);
                                     }
                                 });
                             }
@@ -242,7 +264,7 @@ public class SettingsFragment extends Fragment {
                                     @Override
                                     public void onClick(View view, int position, boolean isLongClick) {
                                         rvCategories.setVisibility(View.GONE);
-                                        checkCafeCategories(category);
+                                        checkCafeCategoryDrinks(category);
                                     }
                                 });
                             }
@@ -278,11 +300,12 @@ public class SettingsFragment extends Fragment {
                     cafeCategoriesRef.child(cafeCategoryId).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(!snapshot.exists())
+                                return;
                             if(snapshot.hasChild("image")) {
                                 Category cafeCategory = new Category(snapshot.child("description").getValue().toString(),
                                         snapshot.child("image").getValue().toString(),
                                         snapshot.child("name").getValue().toString());
-                                Log.d("daliradis", "onDataChange: ");
 
                                 if(isAdded()) {
                                     int id = getResources().getIdentifier(cafeCategory.getImage(), "drawable", getActivity().getPackageName());
@@ -300,7 +323,6 @@ public class SettingsFragment extends Fragment {
                                     @Override
                                     public void onClick(View view, int position, boolean isLongClick) {
                                         rvCategories.setVisibility(View.GONE);
-                                        txtSettingsUpdateMenu.setVisibility(View.VISIBLE);
                                         insertCategoryDrinks(cafeCategoryId);
                                     }
                                 });
@@ -321,7 +343,6 @@ public class SettingsFragment extends Fragment {
                                     @Override
                                     public void onClick(View view, int position, boolean isLongClick) {
                                         rvCategories.setVisibility(View.GONE);
-                                        txtSettingsUpdateMenu.setVisibility(View.VISIBLE);
                                         insertCategoryDrinks(cafeCategoryId);
                                     }
                                 });
@@ -348,7 +369,7 @@ public class SettingsFragment extends Fragment {
 
     //checking if the cafe already have drink/drinks for selected category
     //is the new drink first drink in selected category
-    public void checkCafeCategories(Category selectedCategory) {
+    public void checkCafeCategoryDrinks(Category selectedCategory) {
         firstDrinkNewCategory = true;
         cafeCategoriesRef = FirebaseDatabase.getInstance().getReference("cafes")
                 .child(cartViewModel.getCafeId().getValue()).child("cafeDrinksCategories");
@@ -375,7 +396,6 @@ public class SettingsFragment extends Fragment {
     //function for checking input correctness (dialog)
     //bottom sheet for adding image
     public void addNewDrinkPreparation(Category selectedCategory) {
-        txtSettingsNewDrink.setVisibility(View.VISIBLE);
         checkDrinkName = checkDrinkDescription = checkDrinkPrice = false;
         newDrinkSecondConfirm = imageSelected = true;
         View addNewDrinkView = getLayoutInflater().inflate(R.layout.settings_dialog_drink_input, null);
@@ -456,10 +476,11 @@ public class SettingsFragment extends Fragment {
                                 etDrinkPrice.getText().length() == 1 &&
                                 etDrinkPrice.getText().charAt(0) == '.') {
                             toastMessage.showToast(getResources().getString(R.string.settings_new_drink_price_incorrect_input), 0);
+                            etDrinkPrice.setText("");
                         }
                         if(etDrinkPrice.getText().length() >= 9) {
                             checkDrinkPrice = true;
-                            toastMessage.showToast(getResources().getString(R.string.settings_dialog_drink_description_overflow), 0);
+                            toastMessage.showToast(getResources().getString(R.string.settings_dialog_drink_price_overflow), 0);
                             etDrinkPrice.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.drink_remove_button)));
                         }
                         else if(checkDrinkPrice) {
@@ -578,7 +599,6 @@ public class SettingsFragment extends Fragment {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle(getResources().getString(R.string.settings_new_drink_uploading));
         progressDialog.show();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd", Locale.CANADA);
         Date now = new Date();
         String fileName = cartViewModel.getCafeId().getValue() + "_" + recivedNewDrink.getCafeDrinkName() + "_" + simpleDateFormat.format(now);
         Bitmap bitmap = ((BitmapDrawable) drinkImage.getDrawable()).getBitmap();
@@ -703,6 +723,7 @@ public class SettingsFragment extends Fragment {
                             }
                             else {
                                 Glide.with(getActivity()).load(cafeCategoryDrink.getCafeDrinkImage()).into(holder.drinkImageView);
+                                Glide.with(getActivity()).load(cafeCategoryDrink.getCafeDrinkImage()).into(holder.oldDrinkImageView);
                             }
                         }
 
@@ -710,13 +731,31 @@ public class SettingsFragment extends Fragment {
                         holder.txtDrinkDescription.setText(cafeCategoryDrink.getCafeDrinkDescription());
                         holder.txtDrinkPrice.setText(decimalFormat.format(cafeCategoryDrink.getCafeDrinkPrice()));
 
+                        holder.txtDrinkDescription.setSelection(holder.txtDrinkDescription.getText().length());
+
                         holder.btnAcceptUpdate.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                boolean imageAdded = true;
+                                if(areImagesSame(holder.oldDrinkImageView, holder.drinkImageView))
+                                    imageAdded = false;
                                 Drink updatedDrink = new Drink(snapshot.getKey(),
                                 holder.txtDrinkName.getText().toString(), holder.txtDrinkDescription.getText().toString(),
                                 holder.txtDrinkPrice.getText().toString(), cafeCategoryDrink.getCafeDrinkImage());
-                                updateDrink(cafeCategoryId, updatedDrink, holder.drinkImageView);
+                                if(cafeCategoryDrink.getCafeDrinkName().equals(updatedDrink.getCafeDrinkName()) &&
+                                cafeCategoryDrink.getCafeDrinkDescription().equals(updatedDrink.getCafeDrinkDescription()) &&
+                                priceToTextConverter(cafeCategoryDrink.getCafeDrinkPrice()).equals(updatedDrink.getCafeDrinkPriceString())) {
+                                    if(imageAdded)
+                                        updateDrink(cafeCategoryId, updatedDrink, holder.drinkImageView, 0);
+                                    else
+                                        toastMessage.showToast(getResources().getString(R.string.drink_same_update), 0);
+                                }
+                                else {
+                                    if(imageAdded)
+                                        updateDrinkCheck(cafeCategoryId, updatedDrink, holder.drinkImageView, 2);
+                                    else
+                                        updateDrinkCheck(cafeCategoryId, updatedDrink, holder.drinkImageView, 1);
+                                }
                             }
                         });
 
@@ -726,6 +765,7 @@ public class SettingsFragment extends Fragment {
                                 deleteDrink(cafeCategoryId, cafeCategoryDrink);
                             }
                         });
+
 
                         holder.drinkImageView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -771,7 +811,6 @@ public class SettingsFragment extends Fragment {
                     }
                 });
             }
-
             @NonNull
             @Override
             public UpdateDrinkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -783,36 +822,173 @@ public class SettingsFragment extends Fragment {
         rvCategoryDrinks.setAdapter(adapterDrinks);
         adapterDrinks.startListening();
     }
+    //checking if new image is added
+    public boolean areImagesSame(ImageView imageView1, ImageView imageView2) {
+        Bitmap bitmap1 = ((BitmapDrawable) imageView1.getDrawable()).getBitmap();
+        Bitmap bitmap2 = ((BitmapDrawable) imageView2.getDrawable()).getBitmap();
+        return bitmap1.sameAs(bitmap2);
+    }
+    //converting float price into string with , (2,00)
+    public String priceToTextConverter(float number) {
+        NumberFormat formatter = NumberFormat.getInstance(Locale.FRANCE);
+        formatter.setMinimumFractionDigits(2);
+        formatter.setMaximumFractionDigits(2);
+        return formatter.format(number);
+    }
 
-    public void updateDrink(String cafeCategoryId, Drink cafeDrink, ImageView drinkImageView) {
-        if(cafeDrink.getCafeDrinkName().length() > 25 || cafeDrink.getCafeDrinkName().length() < 1) {
+    public void updateDrinkCheck(String cafeCategoryId, Drink recivedUpdatedDrink, ImageView drinkImageView, int updates) {
+        if(recivedUpdatedDrink.getCafeDrinkName().length() > 25 || recivedUpdatedDrink.getCafeDrinkName().length() < 1) {
             toastMessage.showToast(getResources().getString(R.string.drink_name_update_condition), 0);
             return;
         }
-        if(cafeDrink.getCafeDrinkDescription().length() > 50 || cafeDrink.getCafeDrinkDescription().length() < 1) {
+        if(recivedUpdatedDrink.getCafeDrinkDescription().length() > 50 || recivedUpdatedDrink.getCafeDrinkDescription().length() < 1) {
             toastMessage.showToast(getResources().getString(R.string.drink_description_update_condition), 0);
             return;
         }
-        if(cafeDrink.getCafeDrinkPriceString().toString().length() > 9 ||
-                cafeDrink.getCafeDrinkPriceString().toString().length() < 1) {
+        if(recivedUpdatedDrink.getCafeDrinkPriceString().toString().length() > 9 ||
+                recivedUpdatedDrink.getCafeDrinkPriceString().toString().length() < 1) {
             toastMessage.showToast(getResources().getString(R.string.drink_price_update_condition), 0);
             return;
         }
-        if(cafeDrink.getCafeDrinkPriceString().toString().length() == 2 &&
-        cafeDrink.getCafeDrinkPriceString().toString().charAt(0) == '0') {
-            if(cafeDrink.getCafeDrinkPriceString().charAt(1) != ',' &&
-            cafeDrink.getCafeDrinkPriceString().charAt(1) != '.') {
+        if(recivedUpdatedDrink.getCafeDrinkPriceString().toString().length() == 2 &&
+                recivedUpdatedDrink.getCafeDrinkPriceString().toString().charAt(0) == '0') {
+            if(recivedUpdatedDrink.getCafeDrinkPriceString().charAt(1) != ',' &&
+                    recivedUpdatedDrink.getCafeDrinkPriceString().charAt(1) != '.') {
                 toastMessage.showToast(getResources().getString(R.string.settings_new_drink_price_incorrect_input), 0);
                 return;
             }
         }
-        if(cafeDrink.getCafeDrinkPriceString().toString().length() == 1 &&
-        cafeDrink.getCafeDrinkPriceString().toString().charAt(0) == '.' ||
-        cafeDrink.getCafeDrinkPriceString().charAt(0) == ',') {
+        if(recivedUpdatedDrink.getCafeDrinkPriceString().toString().length() == 1 &&
+                recivedUpdatedDrink.getCafeDrinkPriceString().toString().charAt(0) == '.' ||
+                recivedUpdatedDrink.getCafeDrinkPriceString().charAt(0) == ',') {
             toastMessage.showToast(getResources().getString(R.string.settings_new_drink_price_incorrect_input), 0);
             return;
         }
-        updateDrinkImage(cafeCategoryId, cafeDrink, drinkImageView);
+        updateDrink(cafeCategoryId, recivedUpdatedDrink, drinkImageView, updates);
+    }
+
+    private void updateDrink(String selectedCategory, Drink recivedUpdatedDrink, ImageView drinkImageView, int updates) {
+        progressDialog = new ProgressDialog(getActivity());
+        switch (updates) {
+            case 0: {
+                progressDialog.setTitle(getResources().getString(R.string.settings_update_drink_uploading_image));
+                progressDialog.show();
+                Date now = new Date();
+                String fileName = cartViewModel.getCafeId().getValue() + "_" + recivedUpdatedDrink.getCafeDrinkName() + "_" + simpleDateFormat.format(now);
+                Bitmap bitmap = ((BitmapDrawable) drinkImageView.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+                storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
+                UploadTask uploadTask = storageReference.putBytes(data);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> downloadImageUri = taskSnapshot.getStorage().getDownloadUrl();
+                        downloadImageUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                cafeCategoryRef = FirebaseDatabase.getInstance().getReference(
+                                        "cafes/" + cartViewModel.getCafeId().getValue() + "/cafeDrinksCategories/"
+                                                + selectedCategory + "/cafeDrinks/" + recivedUpdatedDrink.getCafeDrinkId() + "/cafeDrinkImage");
+                                cafeCategoryRef.setValue(downloadImageUri.getResult().toString());
+                                insertCategoryDrinks(selectedCategory);
+                                if (progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                if(!recivedUpdatedDrink.getCafeDrinkImage().equals(
+                                        "https://firebasestorage.googleapis.com/v0/b/online-konobar-pica.appspot.com/o/images%2Fno_image.jpg?alt=media&token=fdb9ce0a-6695-45c6-815f-e3ebba362f12")) {
+                                    StorageReference oldImageRef = FirebaseStorage.getInstance().getReferenceFromUrl(recivedUpdatedDrink.getCafeDrinkImage());
+                                    oldImageRef.delete();
+                                }
+                            }
+                        });
+                        downloadImageUri.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
+                });
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
+            break;
+            case 1: {
+                progressDialog.setTitle(getResources().getString(R.string.settings_update_drink_uploading));
+                progressDialog.show();
+                String drinkPriceConvertFormat = recivedUpdatedDrink.getCafeDrinkPriceString().replace(',', '.');
+                float drinkPrice = Float.parseFloat(drinkPriceConvertFormat);
+                cafeCategoryRef = FirebaseDatabase.getInstance().getReference(
+                        "cafes/" + cartViewModel.getCafeId().getValue() + "/cafeDrinksCategories/"
+                                + selectedCategory + "/cafeDrinks/" + recivedUpdatedDrink.getCafeDrinkId());
+                Drink cafeDrinkDbFormat = new Drink(recivedUpdatedDrink.getCafeDrinkName(),
+                        recivedUpdatedDrink.getCafeDrinkDescription(), drinkPrice,
+                        recivedUpdatedDrink.getCafeDrinkImage());
+                cafeCategoryRef.setValue(cafeDrinkDbFormat);
+                insertCategoryDrinks(selectedCategory);
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+            }
+            break;
+            case 2: {
+                progressDialog.setTitle(getResources().getString(R.string.settings_update_drink_uploading));
+                progressDialog.show();
+                Date now = new Date();
+                String fileName = cartViewModel.getCafeId().getValue() + "_" + recivedUpdatedDrink.getCafeDrinkName() + "_" + simpleDateFormat.format(now);
+                Bitmap bitmap = ((BitmapDrawable) drinkImageView.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+                storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
+                UploadTask uploadTask = storageReference.putBytes(data);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> downloadImageUri = taskSnapshot.getStorage().getDownloadUrl();
+                        downloadImageUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String drinkPriceConvertFormat = recivedUpdatedDrink.getCafeDrinkPriceString().replace(',', '.');
+                                float drinkPrice = Float.parseFloat(drinkPriceConvertFormat);
+                                cafeCategoryRef = FirebaseDatabase.getInstance().getReference(
+                                        "cafes/" + cartViewModel.getCafeId().getValue() + "/cafeDrinksCategories/"
+                                                + selectedCategory + "/cafeDrinks/" + recivedUpdatedDrink.getCafeDrinkId());
+                                Drink cafeDrinkDbFormat = new Drink(recivedUpdatedDrink.getCafeDrinkName(),
+                                        recivedUpdatedDrink.getCafeDrinkDescription(), drinkPrice,
+                                        downloadImageUri.getResult().toString());
+                                cafeCategoryRef.setValue(cafeDrinkDbFormat);
+                                insertCategoryDrinks(selectedCategory);
+                                if (progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                if(!recivedUpdatedDrink.getCafeDrinkImage().equals(
+                                        "https://firebasestorage.googleapis.com/v0/b/online-konobar-pica.appspot.com/o/images%2Fno_image.jpg?alt=media&token=fdb9ce0a-6695-45c6-815f-e3ebba362f12")) {
+                                    StorageReference oldImageRef = FirebaseStorage.getInstance().getReferenceFromUrl(recivedUpdatedDrink.getCafeDrinkImage());
+                                    oldImageRef.delete();
+                                }
+                            }
+                        });
+                        downloadImageUri.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                toastMessage.showToast(getResources().getString(R.string.settings_update_uploading_image_failed), 0);
+                            }
+                        });
+                    }
+                });
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        toastMessage.showToast(getResources().getString(R.string.settings_update_uploading_failed), 0);
+                    }
+                });
+            }
+            break;
+        }
     }
 
     public void deleteDrink(String cafeCategoryId, Drink cafeDrink) {
@@ -824,7 +1000,7 @@ public class SettingsFragment extends Fragment {
         Button btnDeleteCancel = (Button) deleteDrinkView.findViewById(R.id.btnSettingsDeleteCancel);
 
         cafeCategoryRef = FirebaseDatabase.getInstance().getReference("cafes")
-        .child(cartViewModel.getCafeId().getValue()).child("cafeDrinksCategories").child(cafeCategoryId).child("name");
+                .child(cartViewModel.getCafeId().getValue()).child("cafeDrinksCategories").child(cafeCategoryId).child("name");
         cafeCategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -840,7 +1016,7 @@ public class SettingsFragment extends Fragment {
         Glide.with(getActivity()).load(cafeDrink.getCafeDrinkImage()).into(ivDeleteDrinkImage);
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(deleteDrinkView)
-                .setTitle(getResources().getString(R.string.cart_dialog_title_text))
+                .setTitle(getResources().getString(R.string.drink_delete_confirm))
                 .create();
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -855,11 +1031,33 @@ public class SettingsFragment extends Fragment {
                 btnDeleteAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        boolean cartDrink = false;
+                        HashMap<String, DrinkBill> drinksInCart = cartViewModel.getDrinksInCart().getValue();
+                        if (drinksInCart != null && !drinksInCart.isEmpty()) {
+                            //if cart is empty cannot iterate through empty HashMap
+                            for (String key : drinksInCart.keySet()) {
+                                DrinkBill drinkBill = drinksInCart.get(key);
+                                if(drinkBill.getDrinkId().equals(cafeDrink.getCafeDrinkId())) {
+                                    cartDrink = true;
+                                }
+                            }
+                        }
+                        if(cartDrink) {
+                            drinksInCart.remove(cafeDrink.getCafeDrinkId());
+                            cartViewModel.setDrinksInCart(drinksInCart);
+                        }
+
                         cafeCategoryRef = FirebaseDatabase.getInstance().getReference(
-                    "cafes/" + cartViewModel.getCafeId().getValue() + "/cafeDrinksCategories/"
-                        + cafeCategoryId + "/cafeDrinks/" + cafeDrink.getCafeDrinkId());
+                                "cafes/" + cartViewModel.getCafeId().getValue() + "/cafeDrinksCategories/"
+                                        + cafeCategoryId + "/cafeDrinks/" + cafeDrink.getCafeDrinkId());
                         cafeCategoryRef.removeValue();
                         toastMessage.showToast("Obrisano", 0);
+                        checkEmptyCategory(cafeCategoryId);
+                        if(!cafeDrink.getCafeDrinkImage().equals(
+                                "https://firebasestorage.googleapis.com/v0/b/online-konobar-pica.appspot.com/o/images%2Fno_image.jpg?alt=media&token=fdb9ce0a-6695-45c6-815f-e3ebba362f12")) {
+                            StorageReference deletedDrinkImage = FirebaseStorage.getInstance().getReferenceFromUrl(cafeDrink.getCafeDrinkImage());
+                            deletedDrinkImage.delete();
+                        }
                         dialog.dismiss();
                         insertCategoryDrinks(cafeCategoryId);
                     }
@@ -869,81 +1067,29 @@ public class SettingsFragment extends Fragment {
         dialog.show();
     }
 
-    private void updateDrinkImage(String selectedCategory, Drink recivedNewDrink, ImageView drinkImageView) {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle(getResources().getString(R.string.settings_new_drink_uploading));
-        progressDialog.show();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd", Locale.CANADA);
-        Date now = new Date();
-        String fileName = cartViewModel.getCafeId().getValue() + "_" + recivedNewDrink.getCafeDrinkName() + "_" + simpleDateFormat.format(now);
-        Bitmap bitmap = ((BitmapDrawable) drinkImageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-        storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
-        UploadTask uploadTask = storageReference.putBytes(data);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    public void checkEmptyCategory(String categoryId) {
+        cafeCategoryRef = FirebaseDatabase.getInstance().getReference("cafes")
+            .child(cartViewModel.getCafeId().getValue()).child("cafeDrinksCategories").child(categoryId)
+            .child("cafeDrinks");
+        cafeCategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> downloadImageUri = taskSnapshot.getStorage().getDownloadUrl();
-                downloadImageUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        if(progressDialog.isShowing())
-                            progressDialog.dismiss();
-                        if(recivedNewDrink.getCafeDrinkImage().equals("https://firebasestorage.googleapis.com/v0/b/online-konobar-pica.appspot.com/o/images%2Fno_image.jpg?alt=media&token=fdb9ce0a-6695-45c6-815f-e3ebba362f12")) {
-                            insertCategoryDrinks(selectedCategory);
-                            String drinkPriceConvertFormat = recivedNewDrink.getCafeDrinkPriceString().replace(',','.');
-                            DecimalFormat decimalFormat = new DecimalFormat("#,00");
-                            float drinkPrice = Float.parseFloat(drinkPriceConvertFormat);
-                            cafeCategoryRef = FirebaseDatabase.getInstance().getReference(
-                                    "cafes/" + cartViewModel.getCafeId().getValue() + "/cafeDrinksCategories/"
-                                            + selectedCategory + "/cafeDrinks/" + recivedNewDrink.getCafeDrinkId());
-                            Drink cafeDrinkDbFormat = new Drink(recivedNewDrink.getCafeDrinkName(),
-                                    recivedNewDrink.getCafeDrinkDescription(), drinkPrice,
-                                    downloadImageUri.getResult().toString());
-                            cafeCategoryRef.setValue(cafeDrinkDbFormat);
-                        }
-                        else {
-                            Log.d("PROBA123", "onSuccess: ");
-                            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-                            StorageReference oldImageRef = firebaseStorage.getReferenceFromUrl(recivedNewDrink.getCafeDrinkImage());
-                            oldImageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    insertCategoryDrinks(selectedCategory);
-                                }
-                            });
-                            String drinkPriceConvertFormat = recivedNewDrink.getCafeDrinkPriceString().replace(',','.');
-                            DecimalFormat decimalFormat = new DecimalFormat("#,00");
-                            float drinkPrice = Float.parseFloat(drinkPriceConvertFormat);
-                            cafeCategoryRef = FirebaseDatabase.getInstance().getReference(
-                                    "cafes/" + cartViewModel.getCafeId().getValue() + "/cafeDrinksCategories/"
-                                            + selectedCategory + "/cafeDrinks/" + recivedNewDrink.getCafeDrinkId());
-                            Drink cafeDrinkDbFormat = new Drink(recivedNewDrink.getCafeDrinkName(),
-                                    recivedNewDrink.getCafeDrinkDescription(), drinkPrice,
-                                    downloadImageUri.getResult().toString());
-                            cafeCategoryRef.setValue(cafeDrinkDbFormat);
-                        }
-                    }
-                });
-                downloadImageUri.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        toastMessage.showToast(getResources().getString(R.string.settings_new_drink_image_upload_failed), 0);
-                    }
-                });
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean emptyCategory = true;
+                if(!snapshot.exists()) {
+                    //category is empty
+                    Log.d("PROBA123", "NEMA");
+                    DatabaseReference cafeCategoryDrink = FirebaseDatabase.getInstance().getReference("cafes")
+                            .child(cartViewModel.getCafeId().getValue()).child("cafeDrinksCategories").child(categoryId);
+                    cafeCategoryDrink.removeValue();
+                }
             }
-        });
-        uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                toastMessage.showToast(getResources().getString(R.string.settings_new_drink_failure), 0);
-                if(progressDialog.isShowing())
-                    progressDialog.dismiss();
+            public void onCancelled(@NonNull DatabaseError error) {
+                toastMessage.showToast(getResources().getString(R.string.unknown_error), 0);
             }
         });
     }
+
 
     /*  end of updating cafe menu*/
 
