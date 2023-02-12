@@ -198,6 +198,8 @@ public class SettingsFragment extends Fragment {
             }
         };
         settingsViewModel.getRvSettingsDisplayed().observe(requireActivity(), settingsDisplayedObserver);
+        settingsViewModel.setSettingsChangeDisplayed(false);
+        settingsViewModel.setRvSettingsDisplayed(0);
 
         View root = binding.getRoot();
         return root;
@@ -729,9 +731,11 @@ public class SettingsFragment extends Fragment {
 
                         holder.txtDrinkName.setText(cafeCategoryDrink.getCafeDrinkName());
                         holder.txtDrinkDescription.setText(cafeCategoryDrink.getCafeDrinkDescription());
-                        holder.txtDrinkPrice.setText(decimalFormat.format(cafeCategoryDrink.getCafeDrinkPrice()));
-
                         holder.txtDrinkDescription.setSelection(holder.txtDrinkDescription.getText().length());
+
+                        String value = decimalFormat.format(cafeCategoryDrink.getCafeDrinkPrice()).replace(',', '.');
+                        holder.txtDrinkPrice.setText(value);
+                        holder.txtDrinkPrice.setFilters(new InputFilter[] {new PriceDigitsInputFilter(6, 2, 1000000)});
 
                         holder.btnAcceptUpdate.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -742,9 +746,14 @@ public class SettingsFragment extends Fragment {
                                 Drink updatedDrink = new Drink(snapshot.getKey(),
                                 holder.txtDrinkName.getText().toString(), holder.txtDrinkDescription.getText().toString(),
                                 holder.txtDrinkPrice.getText().toString(), cafeCategoryDrink.getCafeDrinkImage());
+                                if(updatedDrink.getCafeDrinkPriceString().equals(".") || updatedDrink.getCafeDrinkPriceString().equals(",") ||
+                                updatedDrink.getCafeDrinkPriceString().equals("")) {
+                                    updatedDrink.setCafeDrinkPriceString("0");
+                                }
                                 if(cafeCategoryDrink.getCafeDrinkName().equals(updatedDrink.getCafeDrinkName()) &&
                                 cafeCategoryDrink.getCafeDrinkDescription().equals(updatedDrink.getCafeDrinkDescription()) &&
-                                priceToTextConverter(cafeCategoryDrink.getCafeDrinkPrice()).equals(updatedDrink.getCafeDrinkPriceString())) {
+                                priceToTextConverter(cafeCategoryDrink.getCafeDrinkPrice()).equals(
+                                    priceToTextConverter(Float.parseFloat(updatedDrink.getCafeDrinkPriceString())))) {
                                     if(imageAdded)
                                         updateDrink(cafeCategoryId, updatedDrink, holder.drinkImageView, 0);
                                     else

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation2"
+    app:startDestination="@+id/bottom_navigation_home">
+
+    <fragment
+        android:id="@+id/bottom_navigation_home"
+        android:name="com.example.onlinekonobar.ui.home.HomeFragment"
+        android:label="@string/bottom_nav_title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/bottom_navigation_employees"
+        android:name="com.example.onlinekonobar.ui.employees.EmployeesFragment"
+        android:label="@string/bottom_nav_title_employees"
+        tools:layout="@layout/fragment_employees" />
+
+    <fragment
+        android:id="@+id/bottom_navigation_logout"
+        android:name="com.example.onlinekonobar.ui.logout.LogoutFragment"
+        android:label="@string/bottom_nav_title_logout"
+        tools:layout="@layout/fragment_logout" />
+</navigation>

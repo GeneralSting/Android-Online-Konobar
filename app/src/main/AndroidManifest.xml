@@ -20,7 +20,9 @@
         <activity
             android:name=".BossActivity"
             android:exported="false"
-            android:label="@string/title_activity_boss" >
+            android:screenOrientation="sensorPortrait"
+            android:label="@string/title_activity_boss"
+            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -30,7 +32,7 @@
             android:exported="false"
             android:label="@string/title_activity_home"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/Theme.OnlineKonobar.NoActionBar" >
+            android:theme="@style/Theme.OnlineKonobar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

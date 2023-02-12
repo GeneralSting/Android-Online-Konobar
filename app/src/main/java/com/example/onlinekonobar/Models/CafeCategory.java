@@ -6,7 +6,7 @@ public class CafeCategory {
     String description;
     String image;
     String name;
-    Map<String, Drink> cafeDrinksCategory;
+    Map<String, Drink> cafeDrinks;
 
     public CafeCategory() {}
 
@@ -14,7 +14,7 @@ public class CafeCategory {
         this.description = description;
         this.image = image;
         this.name = name;
-        this.cafeDrinksCategory = cafeDrinksCategory;
+        this.cafeDrinks = cafeDrinksCategory;
     }
 
     public String getDescription() {
@@ -41,11 +41,11 @@ public class CafeCategory {
         this.name = name;
     }
 
-    public Map<String, Drink> getCafeDrinksCategory() {
-        return cafeDrinksCategory;
+    public Map<String, Drink> getCafeDrinks() {
+        return cafeDrinks;
     }
 
-    public void setCafeDrinksCategory(Map<String, Drink> cafeDrinksCategory) {
-        this.cafeDrinksCategory = cafeDrinksCategory;
+    public void setCafeDrinks(Map<String, Drink> cafeDrinksCategory) {
+        this.cafeDrinks = cafeDrinksCategory;
     }
 }

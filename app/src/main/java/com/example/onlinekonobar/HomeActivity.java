@@ -247,25 +247,27 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
         else if(navigationView.getMenu().findItem(R.id.nav_settings).isChecked()) {
-            switch (settingsViewModel.getRvSettingsDisplayed().getValue()) {
-                case 0:
-                    if(back_pressed + TIME_DELAY > System.currentTimeMillis()) {
-                        super.onBackPressed();
-                        logout();
-                    }
-                    else {
-                        toastMessage.showToast(getResources().getString(R.string.back_button_pressed), 0);
-                    }
-                    back_pressed = System.currentTimeMillis();
-                    break;
-                case 1:
-                    settingsViewModel.setSettingsChangeDisplayed(true);
-                    settingsViewModel.setRvSettingsDisplayed(0);
-                    break;
-                case 2:
-                    settingsViewModel.setSettingsChangeDisplayed(true);
-                    settingsViewModel.setRvSettingsDisplayed(1);
-                    break;
+            if(settingsViewModel.getRvSettingsDisplayed().getValue() != null) {
+                switch (settingsViewModel.getRvSettingsDisplayed().getValue()) {
+                    case 0:
+                        if(back_pressed + TIME_DELAY > System.currentTimeMillis()) {
+                            super.onBackPressed();
+                            logout();
+                        }
+                        else {
+                            toastMessage.showToast(getResources().getString(R.string.back_button_pressed), 0);
+                        }
+                        back_pressed = System.currentTimeMillis();
+                        break;
+                    case 1:
+                        settingsViewModel.setSettingsChangeDisplayed(true);
+                        settingsViewModel.setRvSettingsDisplayed(0);
+                        break;
+                    case 2:
+                        settingsViewModel.setSettingsChangeDisplayed(true);
+                        settingsViewModel.setRvSettingsDisplayed(1);
+                        break;
+                }
             }
         }
         //menu_nav is not displayed

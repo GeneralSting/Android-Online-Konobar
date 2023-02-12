@@ -90,5 +90,18 @@
     <string name="settings_update_uploading_failed">Radnja prekinuta, pogreška servera</string>
     <string name="settings_update_uploading_image_failed">Pogreška servera, nemoguće dohvatiti sliku!</string>
     <string name="drink_full_description">Opis:</string>
+    <string name="title_activity_boss">BossActivity</string>
+    <string name="bottom_nav_title_home">Početna</string>
+    <string name="bottom_nav_title_employees">Zaposlenici</string>
+    <string name="bottom_nav_title_logout">Odjava</string>
+    <string name="logout_text">Odjava, doviđenja</string>
+    <string name="bar_chart_description">Napravljenih računa</string>
+    <string name="no_bar_chart">Nema statistike izdanih računa za prikazati</string>
+    <string name="boss_home_tables_cv">Broj stolova</string>
+    <string name="boss_home_employees_cv">Broj konobara</string>
+    <string name="boss_home_categories_cv">Broj kategorija</string>
+    <string name="boss_home_drinks_cv">Broj pića</string>
+    <string name="boss_home_number_cv">Broj mobitela</string>
+    <string name="boss_home_employee_cv">Zaposlenik</string>
 
 </resources>

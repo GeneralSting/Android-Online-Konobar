@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class CartFragment extends Fragment implements CallBackCart {
     int cafeBillProductsAmount;
     String cafeBillTotalPrice;
     ToastMessage toastMessage;
+    //boolean proba = false;
 
     //firebase
     DatabaseReference drinksCategoryRef, cafeCategoriesRef, newCafeBillRef;
@@ -148,8 +150,20 @@ public class CartFragment extends Fragment implements CallBackCart {
                             }
                         }
                         if(addNewDrink) {
+/*                            new android.os.Handler(Looper.getMainLooper()).postDelayed(
+                                    new Runnable() {
+                                        public void run() {
+                                            if(!proba) {
+                                                drinksInCart = modifiedDrinksInCart;
+                                                cartViewModel.setDrinksInCart(modifiedDrinksInCart);
+                                                insertCartDrinks();
+                                            }
+                                        }
+                                    },
+                                    500);*/
                             modifiedDrinksInCart.put(addNewDrinkBill.getDrinkId(), addNewDrinkBill);
                             if(modifiedDrinksInCart.size() == drinksInCart.size()) {
+                                //proba = true;
                                 createCartRecylcer();
                             }
                         }

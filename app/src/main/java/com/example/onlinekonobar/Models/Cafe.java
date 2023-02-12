@@ -19,7 +19,8 @@ public class Cafe {
         // Default constructor required for calls to DataSnapshot.getValue(Cafe.class)
     }
 
-    public Cafe(String cafeLocation, String cafeName, Integer cafeTables, String cafeOwnerGmail, String getCafeOwnerLastname, String cafeOwnerName, String cafeOwnerOib, String cafeOwnerPhoneNumber, Map<String, Drink> cafeDrinks) {
+    public Cafe(String cafeLocation, String cafeName, Integer cafeTables, String cafeOwnerGmail, String getCafeOwnerLastname, String cafeOwnerName,
+                String cafeOwnerOib, String cafeOwnerPhoneNumber, Map<String, CafeCategory> cafeDrinksCategories, Map<String, Drink> cafeDrinks) {
         this.cafeLocation = cafeLocation;
         this.cafeName = cafeName;
         this.cafeTables = cafeTables;
@@ -28,6 +29,7 @@ public class Cafe {
         this.cafeOwnerName = cafeOwnerName;
         this.cafeOwnerOib = cafeOwnerOib;
         this.cafeOwnerPhoneNumber = cafeOwnerPhoneNumber;
+        this.cafeDrinksCategories = cafeDrinksCategories;
         this.cafeDrinks = cafeDrinks;
     }
 

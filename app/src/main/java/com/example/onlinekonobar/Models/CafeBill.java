@@ -12,6 +12,10 @@ public class CafeBill {
     Integer cafeBillTableNumber;
     HashMap<String, DrinkBill> cafeBillDrinks;
 
+    public CafeBill() {
+        // Default constructor required for calls to DataSnapshot.getValue(Cafe.class)
+    }
+
     public CafeBill(String cafeBillDate, String cafeBillTotalPrice, int cafeBillProductsAmount, String cafeBillEmployee,
                     Integer cafeBillTableNumber, HashMap<String, DrinkBill> cafeBillDrinks) {
         this.cafeBillDate = cafeBillDate;
